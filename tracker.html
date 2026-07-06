@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Meal — Percorso Unico · Sviluppo + Campagna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:#17181A;
+    --steel:#F1F2EF;
+    --paper:#FFFFFF;
+    --ink:#1C1D1A;
+    --dim:#6B6D66;
+    --flame:#E4470B;
+    --flame-deep:#B23306;
+    --done:#1E7A46;
+    --late:#C11B1B;
+    --line:#DDDFD8;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --disp:'Anton',Impact,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+  body{font-family:var(--body);background:var(--steel);color:var(--ink);line-height:1.5;font-size:15px}
+
+  /* ---------- HEADER ---------- */
+  header{background:var(--char);color:#fff;padding:34px 22px 26px}
+  .wrap{max-width:960px;margin:0 auto}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:#9A9C94;text-transform:uppercase}
+  h1{font-family:var(--disp);font-size:clamp(34px,6vw,58px);line-height:1.02;letter-spacing:.01em;margin:8px 0 4px;text-transform:uppercase}
+  h1 .fl{color:var(--flame)}
+  .sub{font-family:var(--mono);font-size:13px;color:#C8CAC2;margin-bottom:20px}
+  .gauge{position:relative;height:34px;background:#26272A;border:1px solid #3A3B3E;overflow:hidden}
+  .gauge-fill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--flame-deep),var(--flame) 70%,#FF7A33);transition:width .5s ease}
+  .gauge-label{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;height:100%;padding:0 12px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.08em}
+  .hdr-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-family:var(--mono);font-size:11px;color:#9A9C94}
+  .hdr-meta b{color:#fff;font-weight:600}
+
+  main{max-width:960px;margin:0 auto;padding:26px 22px 60px}
+
+  /* ---------- CADENZA ---------- */
+  .cadence{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flame);padding:16px 18px;margin-bottom:26px}
+  .cadence h3{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame-deep);margin-bottom:8px}
+  .cadence p{font-size:13.5px;color:var(--ink);margin-bottom:4px}
+  .cadence b{font-weight:600}
+
+  /* ---------- FILTRI ---------- */
+  .filters{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;align-items:center}
+  .filters .flabel{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-right:4px}
+  .fbtn{font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:7px 14px;border:1px solid var(--char);background:var(--paper);color:var(--char);cursor:pointer}
+  .fbtn:hover{background:#E7E8E3}
+  .fbtn.active{background:var(--char);color:#fff}
+  .fbtn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--flame);outline-offset:2px}
+
+  /* ---------- FASI ---------- */
+  .phase{margin-bottom:34px}
+  .phase-head{display:flex;align-items:baseline;gap:14px;border-bottom:3px solid var(--char);padding-bottom:8px;margin-bottom:14px;flex-wrap:wrap}
+  .phase-head h2{font-family:var(--disp);font-size:clamp(20px,3.4vw,28px);text-transform:uppercase;letter-spacing:.02em}
+  .phase-head .range{font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .phase-head .pcount{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .week-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin:16px 0 8px}
+
+  /* ---------- TICKET (task) ---------- */
+  ul.rail{list-style:none}
+  .ticket{position:relative;display:flex;gap:14px;background:var(--paper);border:1px solid var(--line);border-left:1px dashed #B9BBB2;padding:13px 16px 13px 22px;margin-bottom:8px}
+  .ticket::before{content:"";position:absolute;left:-6px;top:50%;transform:translateY(-50%);width:11px;height:11px;border-radius:50%;background:var(--steel);border:1px solid #B9BBB2}
+  .tick{display:flex;align-items:flex-start;padding-top:2px;cursor:pointer;flex-shrink:0}
+  .tick input{position:absolute;opacity:0;width:22px;height:22px;cursor:pointer}
+  .tick .box{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:2px solid var(--char);background:var(--paper);font-size:14px;font-weight:700;color:transparent}
+  .tick input:checked + .box{background:var(--done);border-color:var(--done);color:#fff}
+  .tick input:checked + .box::after{content:"✓"}
+  .tbody{flex:1;min-width:0}
+  .trow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:3px}
+  .due{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;background:var(--char);color:#fff;padding:2px 8px}
+  .ticket.overdue .due{background:var(--late)}
+  .ticket.overdue .due::after{content:" · IN RITARDO"}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:2px 7px;border:1px solid var(--line);color:var(--dim);text-transform:uppercase}
+  .rec{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:2px 7px;background:#EFE4D8;color:#7A5A2E;text-transform:uppercase}
+  .ticket h4{font-size:14.5px;font-weight:600;line-height:1.35}
+  .deliv{font-size:12.5px;color:var(--dim);margin-top:3px}
+  .deliv b{font-weight:600;color:#4A4C45}
+  .ticket.done{opacity:.55}
+  .ticket.done h4{text-decoration:line-through;text-decoration-color:var(--done);text-decoration-thickness:2px}
+
+  /* ---------- GATE ---------- */
+  .gate{position:relative;background:var(--char);color:#F2F3EF;padding:20px 20px 18px 20px;margin:14px 0 10px;border:1px solid var(--char);display:grid;grid-template-columns:auto 1fr;gap:18px}
+  .stamp{font-family:var(--disp);font-size:30px;color:var(--flame);border:3px solid var(--flame);padding:6px 12px;align-self:start;transform:rotate(-4deg);line-height:1}
+  .gate h4{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+  .gate .crit{font-size:13px;color:#C8CAC2;margin-bottom:12px;line-height:1.55}
+  .gate-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
+  .gate select{font-family:var(--mono);font-size:13px;font-weight:600;padding:8px 10px;border:2px solid #4A4B4E;background:#26272A;color:#fff;min-width:130px}
+  .gate select.d-go{border-color:var(--done);color:#5FD695}
+  .gate select.d-rivedi{border-color:#D99A2B;color:#F2C063}
+  .gate select.d-nogo{border-color:var(--late);color:#F08A8A}
+  .gate textarea{flex:1;min-width:220px;min-height:64px;font-family:var(--body);font-size:13px;padding:8px 10px;border:1px solid #4A4B4E;background:#212225;color:#F2F3EF;resize:vertical}
+  .gate textarea::placeholder{color:#7C7E78}
+
+  /* ---------- LAVAGNA TRE STATI ---------- */
+  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:24px}
+  .bcol{background:var(--paper);padding:14px 15px}
+  .bcol .bhead{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .bdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .bcol.attivo .bdot{background:var(--flame);box-shadow:0 0 0 3px rgba(228,71,11,.18)}
+  .bcol.parallelo .bdot{background:var(--done)}
+  .bcol.congelato .bdot{background:#9AA6B2}
+  .bcol .btag{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+  .bcol.attivo .btag{color:var(--flame-deep)}
+  .bcol.parallelo .btag{color:var(--done)}
+  .bcol.congelato .btag{color:#6E7A86}
+  .bcol .bwhat{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:5px}
+  .bcol .bwhy{font-size:11.5px;color:var(--dim);line-height:1.45}
+  .bcol.congelato .bfrozen{font-family:var(--mono);font-size:10.5px;color:#8A929B;line-height:1.7;margin-top:6px}
+  @media(max-width:640px){.board{grid-template-columns:1fr}}
+
+  /* ---------- SWITCH BINARIO ---------- */
+  .track-switch{display:flex;gap:0;margin-bottom:6px;border:2px solid var(--char)}
+  .tsbtn{flex:1;font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.06em;padding:11px 8px;background:var(--paper);color:var(--char);cursor:pointer;border:none;border-right:2px solid var(--char);text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:7px}
+  .tsbtn:last-child{border-right:none}
+  .tsbtn:hover{background:#E7E8E3}
+  .tsbtn.active{background:var(--char);color:#fff}
+  .tsbtn .tsdot{width:8px;height:8px;border-radius:50%}
+  .tsbtn[data-track="dev"] .tsdot{background:var(--flame)}
+  .tsbtn[data-track="camp"] .tsdot{background:var(--done)}
+  .tsbtn[data-track="all"] .tsdot{background:linear-gradient(90deg,var(--flame),var(--done))}
+  .tsbtn.active .tsdot{box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+  .track-hint{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:20px;padding-left:2px}
+
+  /* ---------- PROSSIMO PASSO ---------- */
+  .nextup{display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,#FFF3EC,#FFFFFF);border:1px solid var(--flame);border-left:5px solid var(--flame);padding:12px 16px;margin-bottom:24px;cursor:pointer}
+  .nextup .nlabel{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame-deep);font-weight:600;flex-shrink:0}
+  .nextup .narrow{font-family:var(--disp);font-size:22px;color:var(--flame);flex-shrink:0;line-height:1}
+  .nextup .ntext{flex:1;min-width:0}
+  .nextup .ntitle{font-size:14px;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .nextup .nmeta{font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-top:2px}
+  .nextup.alldone{background:linear-gradient(90deg,#EAF6EF,#FFFFFF);border-color:var(--done);border-left-color:var(--done)}
+  .nextup.alldone .nlabel,.nextup.alldone .narrow{color:var(--done)}
+  .ticket.isnext{box-shadow:0 0 0 2px var(--flame);border-left-color:var(--flame)}
+
+  /* ---------- BINARIO / SEZIONE TRACK ---------- */
+  .track-badge{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;font-weight:600}
+  .track-badge.dev{background:#FCE9E0;color:var(--flame-deep)}
+  .track-badge.camp{background:#E4F1E9;color:var(--done)}
+  .phase-head .track-badge{margin-left:2px}
+
+  /* corsia sviluppo: tinta calda per distinguerla a colpo d'occhio */
+  .phase.dev .ticket{border-left:3px solid var(--flame)}
+  .phase.dev .ticket::before{border-color:var(--flame);background:#FFF3EC}
+  .tag.devtag{border-color:var(--flame);color:var(--flame-deep);background:#FEF4EE}
+
+  /* ---------- CANCELLI (Definition of Done) ---------- */
+  .gates-intro{background:var(--char);color:#F2F3EF;padding:16px 18px;margin:14px 0 4px}
+  .gates-intro h4{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+  .gates-intro p{font-size:12.5px;color:#C8CAC2;line-height:1.55}
+  .gates-intro b{color:#FF8A4C}
+  .cancel{position:relative;display:flex;gap:13px;background:var(--paper);border:1px solid var(--line);border-left:4px solid #9AA6B2;padding:13px 16px;margin-bottom:7px}
+  .cancel .cnum{font-family:var(--disp);font-size:22px;color:#B9C0C8;line-height:1;flex-shrink:0;width:26px;text-align:center}
+  .cancel .cbody{flex:1;min-width:0}
+  .cancel .cname{font-size:14px;font-weight:600;line-height:1.3;margin-bottom:3px}
+  .cancel .cdesc{font-size:12.5px;color:var(--dim);line-height:1.45}
+  .cancel .cpick{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+  .cbtn{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;padding:5px 12px;border:1.5px solid var(--line);background:var(--paper);color:var(--dim);cursor:pointer;text-transform:uppercase}
+  .cbtn:hover{border-color:var(--char)}
+  .cbtn.on-ok{background:var(--done);border-color:var(--done);color:#fff}
+  .cbtn.on-warn{background:#D99A2B;border-color:#D99A2B;color:#fff}
+  .cbtn.on-no{background:var(--late);border-color:var(--late);color:#fff}
+  .cancel.st-ok{border-left-color:var(--done)}
+  .cancel.st-warn{border-left-color:#D99A2B}
+  .cancel.st-no{border-left-color:var(--late)}
+  .cancel.st-ok .cnum{color:var(--done)}
+  .cancel.st-warn .cnum{color:#D99A2B}
+  .cancel.st-no .cnum{color:var(--late)}
+  .dod-verdict{background:var(--paper);border:2px solid var(--char);padding:14px 16px;margin:8px 0 10px;display:flex;align-items:center;gap:14px}
+  .dod-verdict .vstamp{font-family:var(--disp);font-size:15px;letter-spacing:.04em;padding:7px 13px;color:#fff;flex-shrink:0;text-transform:uppercase}
+  .dod-verdict.v-no .vstamp{background:var(--late)}
+  .dod-verdict.v-ok .vstamp{background:var(--done)}
+  .dod-verdict .vtext{font-size:13px;line-height:1.5}
+  .dod-verdict .vtext b{font-weight:600}
+
+  /* prompt-box: il formato fisso a 4 righe */
+  .promptfmt{background:#212225;color:#E6E7E2;font-family:var(--mono);font-size:12px;line-height:1.75;padding:14px 16px;margin:10px 0;border-left:4px solid var(--flame);white-space:pre-wrap;overflow-x:auto}
+  .promptfmt .pk{color:#FF8A4C;font-weight:600}
+
+  /* ---------- KPI ---------- */
+  .kpi{margin-top:40px}
+  .kpi h2{font-family:var(--disp);font-size:24px;text-transform:uppercase;border-bottom:3px solid var(--char);padding-bottom:8px;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse;background:var(--paper);font-size:13px}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:left;background:var(--char);color:#fff;padding:9px 12px}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  td.thr{font-family:var(--mono);font-weight:600;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+
+  footer{max-width:960px;margin:0 auto;padding:10px 22px 50px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+  .savenote{font-family:var(--mono);font-size:11px;color:var(--dim)}
+  .reset{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:7px 12px;border:1px solid #B9BBB2;background:transparent;color:var(--dim);cursor:pointer}
+  .reset:hover{border-color:var(--late);color:var(--late)}
+
+  @media(max-width:640px){
+    .gate{grid-template-columns:1fr}
+    .stamp{justify-self:start}
+    .ticket{padding-left:18px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Staff Meal · Percorso unico · Due binari paralleli</p>
+    <h1>Sviluppo <span class="fl">+</span> Campagna</h1>
+    <p class="sub">Un solo percorso, due binari che si incontrano. Sviluppo: modulo Operatore ai 6 cancelli. Campagna: questionario che sceglie il dolore n.1. 41 passi · lun 06 lug → dom 04 ott 2026.</p>
+    <div class="gauge" role="progressbar" aria-label="Avanzamento complessivo" aria-valuemin="0" aria-valuemax="41" aria-valuenow="0" id="gauge">
+      <div class="gauge-fill" id="gaugeFill"></div>
+      <div class="gauge-label"><span id="gaugeText">0 / 41 passi completati</span><span id="gaugePct">0%</span></div>
+    </div>
+    <div class="hdr-meta">
+      <span>Binario Sviluppo: <b><span id="devDone">0</span>/8 passi</b></span>
+      <span>Binario Campagna: <b><span id="campDone">0</span>/33 comande</b></span>
+      <span>Cancelli Operatore: <b><span id="gatesDone">0</span>/6 ✅</b></span>
+      <span>Incontro binari: <b>~sett. 7</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- LAVAGNA DEI TRE STATI: il sistema anti-dispersione, sempre in testa -->
+  <div class="board" aria-label="Lavagna dei tre stati">
+    <div class="bcol attivo">
+      <div class="bhead"><span class="bdot"></span><span class="btag">🔵 Attivo · max 1</span></div>
+      <div class="bwhat">Modulo Operatore → ai 6 cancelli</div>
+      <div class="bwhy">Ci lavori adesso. Solo chiusura buchi, nessuna funzione nuova. Finito = passa tutti e 6 i cancelli.</div>
+    </div>
+    <div class="bcol parallelo">
+      <div class="bhead"><span class="bdot"></span><span class="btag">🟢 Parallelo · max 1</span></div>
+      <div class="bwhat">Survey PWA + Campagna</div>
+      <div class="bwhy">Gira su un binario che NON tocca il codice del prodotto. Raccoglie dati e candidature mentre finisci Operatore.</div>
+    </div>
+    <div class="bcol congelato">
+      <div class="bhead"><span class="bdot"></span><span class="btag">⚪ Congelato · tutto il resto</span></div>
+      <div class="bwhat">Non ci pensi finché non è il suo turno</div>
+      <div class="bfrozen">HACCP · Ordini · Etichette · Finanze · HR · Executive · Transgourmet · Allarmi · Action Bar · Tutor</div>
+    </div>
+  </div>
+
+  <div class="cadence">
+    <h3>Come leggere questo percorso — la regola d'oro</h3>
+    <p><b>Un fronte attivo alla volta, al 100%.</b> I due binari corrono in parallelo: usa lo switch qui sotto per vedere ora lo Sviluppo, ora la Campagna, o tutto insieme in ordine di tempo.</p>
+    <p><b>La barra arancione "Prossimo passo"</b> ti dice sempre la prima cosa non spuntata in ordine cronologico: se non sai da dove partire, parti da lì.</p>
+    <p><b>Non prometti date di prodotto.</b> La campagna raccoglie candidature; l'onboarding parte quando il modulo passa i 6 cancelli — non prima. La sicurezza viene dal cancello, non dalla fretta.</p>
+  </div>
+
+  <!-- PROSSIMO PASSO: si aggiorna da solo -->
+  <div class="nextup" id="nextUp" role="button" tabindex="0" aria-label="Vai al prossimo passo">
+    <span class="nlabel">Prossimo<br>passo</span>
+    <span class="narrow">→</span>
+    <div class="ntext">
+      <div class="ntitle" id="nextTitle">—</div>
+      <div class="nmeta" id="nextMeta"></div>
+    </div>
+  </div>
+
+  <!-- SWITCH BINARIO -->
+  <div class="track-switch" role="group" aria-label="Scegli binario">
+    <button class="tsbtn active" data-track="all"><span class="tsdot"></span>Tutto</button>
+    <button class="tsbtn" data-track="dev"><span class="tsdot"></span>Sviluppo</button>
+    <button class="tsbtn" data-track="camp"><span class="tsdot"></span>Campagna</button>
+  </div>
+  <p class="track-hint" id="trackHint">Vista completa: entrambi i binari in ordine cronologico.</p>
+
+  <div class="filters" role="group" aria-label="Filtra passi">
+    <span class="flabel">Stato:</span>
+    <button class="fbtn active" data-filter="all">Tutti</button>
+    <button class="fbtn" data-filter="open">Da fare</button>
+    <button class="fbtn" data-filter="done">Fatti</button>
+  </div>
+
+  <!-- ============ BINARIO SVILUPPO · FASE D0 — AUDIT ============ -->
+  <section class="phase dev" id="devAudit" data-track="dev">
+    <div class="phase-head">
+      <h2>D0 · Audit Operatore</h2>
+      <span class="range">Sett. 1 · 06–12 lug</span>
+      <span class="track-badge dev">Sviluppo</span>
+      <span class="pcount" data-pc="devAudit"></span>
+    </div>
+
+    <div class="gates-intro">
+      <h4>Prima di scrivere codice: trasformare "non è testabile" in una lista</h4>
+      <p>Hai detto che la sezione Operatore ha <b>buchi strutturali</b>. Bene: non è una sensazione, è un backlog che non hai ancora scritto. Questi primi passi lo scrivono. Si mappa ogni schermata contro i 6 cancelli → esce la mappa reale dei buchi → quella diventa il lavoro delle settimane 2–6.</p>
+    </div>
+
+    <ul class="rail">
+      <li class="ticket" data-task="d01" data-due="2026-07-07" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">MAR 07 LUG</span><span class="tag devtag">Audit</span></div>
+          <h4>Inventario schermate e flussi del modulo Operatore</h4>
+          <p class="deliv"><b>Consegna:</b> lista completa di ogni schermata, ogni bottone, ogni flusso della sola sezione Operatore (turni, ore, presenze). Nient'altro: il resto è congelato. Serve la mappa del territorio prima di giudicarlo.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="d02" data-due="2026-07-09" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">GIO 09 LUG</span><span class="tag devtag">Audit</span></div>
+          <h4>Audit coi 6 cancelli — segnare ✅/⚠️/❌ per ogni schermata (usa i cancelli qui sotto)</h4>
+          <p class="deliv"><b>Consegna:</b> ogni schermata valutata contro i 6 cancelli. Prompt da usare con Claude: <em>"Facciamo l'audit della sezione Operatore. Ti descrivo ogni schermata; per ciascuna valutiamo i 6 cancelli e segniamo ✅/⚠️/❌. Voglio la mappa completa dei buchi prima di scrivere una riga."</em> Compila i 6 cancelli sotto man mano.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="d03" data-due="2026-07-11" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">SAB 11 LUG</span><span class="tag devtag">Audit</span></div>
+          <h4>Backlog ordinato per criticità — prima i bloccanti (cancelli 1–3), poi robustezza (4–6)</h4>
+          <p class="deliv"><b>Consegna:</b> lista ordinata dei buchi da chiudere. Nessuna funzione nuova, solo chiusura. Questo backlog È il piano delle settimane 2–6.</p>
+        </div>
+      </li>
+    </ul>
+
+    <!-- I 6 CANCELLI: Definition of Done interattiva -->
+    <div class="gates-intro" style="margin-top:18px">
+      <h4>I 6 cancelli · Definition of Done del modulo Operatore</h4>
+      <p>Il modulo <b>non entra in un ristorante</b> finché non sono tutti e sei ✅. Aggiornali durante l'audit (D02) e di nuovo alla fine (D-test). Questo è ciò che rende "finito" una cosa oggettiva invece che una sensazione.</p>
+    </div>
+
+    <div class="cancel" data-cancel="c1">
+      <div class="cnum">1</div>
+      <div class="cbody">
+        <div class="cname">Flusso completo senza vicoli ciechi</div>
+        <div class="cdesc">Ogni percorso arriva a una conclusione. Nessun bottone morto, nessuna schermata da cui non si esce. Le funzioni dormienti sono nascoste, non mostrate e rotte.</div>
+        <div class="cpick"><button class="cbtn" data-v="ok">✅ OK</button><button class="cbtn" data-v="warn">⚠️ Parziale</button><button class="cbtn" data-v="no">❌ Buco</button></div>
+      </div>
+    </div>
+    <div class="cancel" data-cancel="c2">
+      <div class="cnum">2</div>
+      <div class="cbody">
+        <div class="cname">Gestione errori e stati vuoti</div>
+        <div class="cdesc">Cosa vede l'utente se: niente connessione, lista vuota, dato sbagliato, salvataggio fallito. In cucina, con le mani sporche e la fretta, gli errori capitano di continuo. Questo è spesso IL buco strutturale.</div>
+        <div class="cpick"><button class="cbtn" data-v="ok">✅ OK</button><button class="cbtn" data-v="warn">⚠️ Parziale</button><button class="cbtn" data-v="no">❌ Buco</button></div>
+      </div>
+    </div>
+    <div class="cancel" data-cancel="c3">
+      <div class="cnum">3</div>
+      <div class="cbody">
+        <div class="cname">Persistenza verificata</div>
+        <div class="cdesc">Il dato c'è ancora dopo refresh, logout/login, chiusura app, giorno dopo. Testato su device reale, non solo in locale. Lo stack <code>db-write</code> è impostato per questo — va verificato schermata per schermata.</div>
+        <div class="cpick"><button class="cbtn" data-v="ok">✅ OK</button><button class="cbtn" data-v="warn">⚠️ Parziale</button><button class="cbtn" data-v="no">❌ Buco</button></div>
+      </div>
+    </div>
+    <div class="cancel" data-cancel="c4">
+      <div class="cnum">4</div>
+      <div class="cbody">
+        <div class="cname">Multi-utente e multi-ruolo reale</div>
+        <div class="cdesc">Due operatori insieme non si pestano i piedi. I permessi RLS mostrano a ciascuno solo ciò che deve. L'operatore non vede i dati dell'executive. Testato con almeno 2 PIN diversi.</div>
+        <div class="cpick"><button class="cbtn" data-v="ok">✅ OK</button><button class="cbtn" data-v="warn">⚠️ Parziale</button><button class="cbtn" data-v="no">❌ Buco</button></div>
+      </div>
+    </div>
+    <div class="cancel" data-cancel="c5">
+      <div class="cnum">5</div>
+      <div class="cbody">
+        <div class="cname">Usabile in condizioni di cucina</div>
+        <div class="cdesc">Una mano sola, schermo unto, fretta, iPhone piccolo, luce forte. Tocchi grandi, testo leggibile, azioni frequenti a portata di pollice. Questo è il tuo vantaggio: nessun software generico lo fa.</div>
+        <div class="cpick"><button class="cbtn" data-v="ok">✅ OK</button><button class="cbtn" data-v="warn">⚠️ Parziale</button><button class="cbtn" data-v="no">❌ Buco</button></div>
+      </div>
+    </div>
+    <div class="cancel" data-cancel="c6">
+      <div class="cnum">6</div>
+      <div class="cbody">
+        <div class="cname">Sicurezza minima verificata</div>
+        <div class="cdesc">Nessuna chiave in chiaro, nessuna policy <code>USING(true)</code>, PIN come hash, scritture solo via edge function. Risponde agli errori già emersi. Prima di dire "chiuso", fai a Claude il threat-model in 5 punti.</div>
+        <div class="cpick"><button class="cbtn" data-v="ok">✅ OK</button><button class="cbtn" data-v="warn">⚠️ Parziale</button><button class="cbtn" data-v="no">❌ Buco</button></div>
+      </div>
+    </div>
+
+    <div class="dod-verdict v-no" id="dodVerdict">
+      <span class="vstamp" id="dodStamp">Non pronto</span>
+      <div class="vtext" id="dodText"><b>0/6 cancelli superati.</b> Il modulo Operatore non è ancora testabile in un ristorante. Chiudi i buchi segnati, poi rivaluta.</div>
+    </div>
+  </section>
+
+  <!-- ============ BINARIO SVILUPPO · FASE D1 — CHIUSURA MODULO ============ -->
+  <section class="phase dev" id="devBuild" data-track="dev">
+    <div class="phase-head">
+      <h2>D1 · Chiusura Operatore</h2>
+      <span class="range">Sett. 2–6 · 13 lug – 16 ago</span>
+      <span class="track-badge dev">Sviluppo</span>
+      <span class="pcount" data-pc="devBuild"></span>
+    </div>
+
+    <div class="gates-intro">
+      <h4>Il formato di prompt fisso — ogni prompt di sviluppo apre così</h4>
+      <p>Risolve la dispersione e le decisioni delegate: nessun buco che io debba indovinare, e il risultato è frutto di una tua decisione. Copia questo schema all'inizio di ogni prompt di chiusura.</p>
+    </div>
+    <div class="promptfmt"><span class="pk">OBIETTIVO:</span> [cosa deve fare esattamente, 1 frase]
+<span class="pk">VINCOLI:</span> [stack, cosa rispettare — es. scritture via db-write]
+<span class="pk">NON TOCCARE:</span> [quali sezioni/componenti restano intatti]
+<span class="pk">VERIFICA:</span> [come saprò che è fatto — quale cancello, quale test]</div>
+
+    <p class="week-label">Settimane 2–5 · chiusura buchi, uno per prompt</p>
+    <ul class="rail">
+      <li class="ticket" data-task="d04" data-due="2026-07-25" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">ENTRO VEN 25 LUG</span><span class="tag devtag">Dev</span></div>
+          <h4>Chiudere i buchi BLOCCANTI (cancelli 1–3): flussi completi, gestione errori/stati vuoti, persistenza</h4>
+          <p class="deliv"><b>Consegna:</b> ogni buco bloccante del backlog chiuso, un prompt per buco, preview prima del codice, file completo dopo, zero warning esbuild. A fine settimana: cancelli 1, 2, 3 verso ✅.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="d05" data-due="2026-08-08" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">ENTRO SAB 08 AGO</span><span class="tag devtag">Dev</span></div>
+          <h4>Chiudere i buchi di ROBUSTEZZA (cancelli 4–5): multi-ruolo reale + usabilità in cucina</h4>
+          <p class="deliv"><b>Consegna:</b> testato con 2 PIN diversi (operatore vs chef); rivisto per uso a una mano/schermo unto/fretta. Cancelli 4 e 5 verso ✅.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="d06" data-due="2026-08-12" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">ENTRO MER 12 AGO</span><span class="tag devtag">Sicurezza</span></div>
+          <h4>Threat-model del modulo (cancello 6) — la checklist fissa a 5 punti</h4>
+          <p class="deliv"><b>Consegna:</b> chiedere a Claude: <em>"Threat model di questo modulo: 1) chiavi in chiaro nel client? (NO) 2) RLS USING(true) su queste tabelle? (NO) 3) ogni scrittura via db-write con HMAC? (SÌ) 4) PIN/dati sensibili come hash? (SÌ) 5) un ruolo legge dati di un altro? (NO)"</em> Tutti verdi = cancello 6 ✅.</p>
+        </div>
+      </li>
+    </ul>
+
+    <p class="week-label">Settimana 6 · verifica e dogfooding</p>
+    <ul class="rail">
+      <li class="ticket" data-task="d07" data-due="2026-08-14" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 14 AGO</span><span class="tag devtag">Test</span></div>
+          <h4>Test finale sui 6 cancelli su device reale — aggiornare i cancelli sopra</h4>
+          <p class="deliv"><b>Consegna:</b> ogni cancello verificato con un caso concreto su iPhone reale, non "sembra funzionare". Aggiornare i 6 cancelli nella Fase D0: obiettivo tutti ✅.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="d08" data-due="2026-08-16" data-track="dev">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatto"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">DOM 16 AGO</span><span class="tag devtag">Test</span></div>
+          <h4>🍔 Dogfooding: usa TU il modulo per una settimana come operatore di un fast food</h4>
+          <p class="deliv"><b>Consegna:</b> ogni frizione che senti tu è un buco che sentirebbe un cliente. Diario delle frizioni → se emergono buchi nuovi, tornano nel backlog PRIMA di dare il modulo a un pilota. Il test più onesto che esista.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="gate" data-gate="dod">
+      <div class="stamp" style="font-size:20px;padding:8px 12px">DoD</div>
+      <div>
+        <h4>Gate Sviluppo · dom 16 ago — Il modulo è testabile?</h4>
+        <p class="crit">Criterio unico e oggettivo: <b>tutti e 6 i cancelli su ✅</b>. GO = il modulo Operatore può entrare in un ristorante reale; parte l'onboarding del primo pilota (si aggancia alla Fase 4 campagna). RIVEDI = restano 1–2 cancelli ⚠️/❌: si chiudono prima, l'onboarding slitta ma non si forza. NO-GO = emersi buchi strutturali profondi nel dogfooding: il modulo torna in lavorazione, e va bene così — meglio un pilota in ritardo che un primo cliente deluso.</p>
+        <div class="gate-controls">
+          <select aria-label="Decisione gate Sviluppo">
+            <option value="">— Decisione</option>
+            <option value="go">GO</option>
+            <option value="rivedi">RIVEDI</option>
+            <option value="nogo">NO-GO</option>
+          </select>
+          <textarea placeholder="Cancelli ancora aperti, frizioni dal dogfooding, data realistica per il primo pilota..." aria-label="Note gate Sviluppo"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FASE 1 ============ -->
+  <section class="phase" id="fase1" data-track="camp">
+    <div class="phase-head">
+      <h2>Fase 1 · Fondamenta</h2>
+      <span class="range">Sett. 1–2 · 06–19 lug</span>
+      <span class="track-badge camp">Campagna</span>
+      <span class="pcount" data-pc="fase1"></span>
+    </div>
+
+    <p class="week-label">Settimana 1 · lun 06 – dom 12 lug</p>
+    <ul class="rail">
+      <li class="ticket" data-task="t01" data-due="2026-07-08">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">MER 08 LUG</span><span class="tag">Dev</span></div>
+          <h4>Tabella Supabase <code>survey_responses</code> + RLS restrittiva</h4>
+          <p class="deliv"><b>Consegna:</b> migration applicata su progetto EU-Frankfurt, insert anonimo bloccato lato client, verificata via SQL editor.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t02" data-due="2026-07-09">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">GIO 09 LUG</span><span class="tag">Dev</span></div>
+          <h4>Edge Function <code>survey-write</code> — insert-only, whitelist tabella, rate-limit per IP, honeypot anti-bot</h4>
+          <p class="deliv"><b>Consegna:</b> deploy + test curl (insert valido passa, tabella non whitelisted rifiutata, flood bloccato). Pattern <code>db-write</code>, pubblico e blindato.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t03" data-due="2026-07-10">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 10 LUG</span><span class="tag">Dev</span></div>
+          <h4>Survey PWA single-file: 7 domande, i18n IT/DE/EN (struttura estendibile a FR/ES), benchmark finale, contatore social proof, tracking <code>?src</code>+<code>lang</code> — con <b>doppia CTA email</b> nella schermata finale</h4>
+          <p class="deliv"><b>Consegna:</b> build esbuild zero warning, design system Staff Meal (il questionario È la demo), lingua auto da browser con switch manuale. Schermata finale con due inviti separati e dichiarati: (a) "Candidati al Test Drive" e (b) "Vuoi solo il report 'Cosa ci hanno detto le cucine'? Lascia l'email, solo quello." — tag distinti nel DB (<code>pilot_candidate</code> / <code>report_only</code>), stessa checkbox di consenso. Pacchetto unico additivo, nessun tocco al monolite.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t04" data-due="2026-07-11">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">SAB 11 LUG</span><span class="tag">Legal</span></div>
+          <h4>Informativa privacy nFADP/GDPR — breve, linkata in calce, checkbox esplicita per l'email</h4>
+          <p class="deliv"><b>Consegna:</b> pagina pubblicabile in IT/DE/EN. Minimizzazione: niente nome, niente telefono.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t05" data-due="2026-07-12">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">DOM 12 LUG</span><span class="tag">Dev</span></div>
+          <h4>Dominio <code>sondaggio.staffmeal.ch</code> + deploy staging su Netlify</h4>
+          <p class="deliv"><b>Consegna:</b> URL live con HTTPS, redirect testati, parametri <code>?src=ig/li/fb/tt/wa/qr</code> registrati correttamente.</p>
+        </div>
+      </li>
+    </ul>
+
+    <p class="week-label">Settimana 2 · lun 13 – dom 19 lug</p>
+    <ul class="rail">
+      <li class="ticket" data-task="t06" data-due="2026-07-15">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">MER 15 LUG</span><span class="tag">Content</span></div>
+          <h4>Transcreazione questionario in IT/DE/EN (regole sez. 7.5: DE concreto, EN secco) — FR/ES rinviate all'Onda successiva</h4>
+          <p class="deliv"><b>Consegna:</b> 3 file i18n validati e caricati nella survey PWA; il DE (scritto, mai parlato) revisionato da madrelingua o revisione AI incrociata. La struttura i18n resta pronta ad accogliere FR/ES quando ci saranno casi studio da mostrare.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t07" data-due="2026-07-17">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 17 LUG</span><span class="tag">Dev</span></div>
+          <h4>Dashboard admin protetta PIN (pattern LoginGate): funnel per sorgente, dolori per ruolo/segmento, ore perse aggregate, esplora risposte aperte</h4>
+          <p class="deliv"><b>Consegna:</b> dashboard live su route protetta, dati di test visibili in tutte le viste.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t08" data-due="2026-07-17">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 17 LUG</span><span class="tag">Dev</span></div>
+          <h4>Generatore report AI: pulsante "Genera Report" → risposte aperte a Claude API → pattern, citazioni per lingua, priorità di sviluppo</h4>
+          <p class="deliv"><b>Consegna:</b> primo report generato su ~20 risposte di test. Chiave API mai lato client (via Edge Function).</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t09" data-due="2026-07-17">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 17 LUG</span><span class="tag">Content</span></div>
+          <h4>Script video "Passione" + "Edgy" definitivi in italiano + transcreazione sottotitoli DE/EN — <b>decisione presa: parlato solo IT</b>, il tedesco vive nei sottotitoli</h4>
+          <p class="deliv"><b>Consegna:</b> script definitivi stampati per il set. Nessun take in tedesco: l'in-group bias regge solo con la lingua in cui sei davvero te stesso. Sottotitoli DE revisionati (Sie per LinkedIn, du per Reels/TikTok).</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t10" data-due="2026-07-18">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">SAB 18 LUG</span><span class="tag">Mktg</span></div>
+          <h4>QR code per stampa + test end-to-end del questionario da mobile in IT/DE/EN</h4>
+          <p class="deliv"><b>Consegna:</b> QR vettoriale pronto per stampa, percorso completo video→landing→submit→benchmark verificato su iPhone e Android.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="gate" data-gate="r1">
+      <div class="stamp">R1</div>
+      <div>
+        <h4>Gate R1 · dom 19 lug — Go/No-Go girato</h4>
+        <p class="crit">Criteri: survey live e testata in IT/DE/EN · dashboard funzionante · script transcreati e stampati · privacy pubblicata · QR pronto. Se manca qualcosa: RIVEDI = girato slitta di max 3 giorni, si recupera comprimendo il montaggio. NO-GO solo se la survey non è live (senza landing il video non ha destinazione).</p>
+        <div class="gate-controls">
+          <select aria-label="Decisione gate R1">
+            <option value="">— Decisione</option>
+            <option value="go">GO</option>
+            <option value="rivedi">RIVEDI</option>
+            <option value="nogo">NO-GO</option>
+          </select>
+          <textarea placeholder="Note di revisione: cosa manca, cosa slitta, nuova data..." aria-label="Note gate R1"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FASE 2 ============ -->
+  <section class="phase" id="fase2" data-track="camp">
+    <div class="phase-head">
+      <h2>Fase 2 · Il Girato</h2>
+      <span class="range">Sett. 3 · 20–26 lug</span>
+      <span class="track-badge camp">Campagna</span>
+      <span class="pcount" data-pc="fase2"></span>
+    </div>
+    <ul class="rail">
+      <li class="ticket" data-task="t11" data-due="2026-07-20">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">LUN 20 LUG</span><span class="tag">Prod</span></div>
+          <h4>Pre-produzione: shot list dalla checklist 7.2, attrezzatura, location BBQ confermata, piano meteo con giorno di backup</h4>
+          <p class="deliv"><b>Consegna:</b> shot list stampata (fuoco→mani/etichette→volto nei primi 3s), lista B-roll completa, batterie/schede/luci verificate.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t12" data-due="2026-07-23">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">ENTRO GIO 23 LUG</span><span class="tag">Prod</span></div>
+          <h4>Giornata girato BBQ — master 50s + cut 30s + cut 15s, entrambe le versioni (Passione/Edgy), ogni take doppio (calma/carica), B-roll completo</h4>
+          <p class="deliv"><b>Consegna:</b> footage verificato sul posto prima di smontare (audio pulito, fuoco visibile nei primi 2s, verticale 9:16). Backup meteo: ven 24 – dom 26 lug.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t13" data-due="2026-07-26">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">DOM 26 LUG</span><span class="tag">Prod</span></div>
+          <h4>Montaggio: 2 versioni × 3 formati, parlato IT + sottotitoli grandi ad alto contrasto in IT/DE/EN</h4>
+          <p class="deliv"><b>Consegna:</b> 6 file master esportati 9:16 (l'85%+ gira senza audio: i sottotitoli DE/EN coprono la Svizzera tedesca senza un take in tedesco), hook pronunciato entro il secondo 2, 3 stacchi nei primi 3 secondi, finale col morso.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t14" data-due="2026-07-26">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">DOM 26 LUG</span><span class="tag">Content</span></div>
+          <h4>Copy per canale in IT/DE/EN: caption IG/TikTok, post LinkedIn fondatore, post gruppi Facebook, messaggio WhatsApp inoltrabile, email associazioni</h4>
+          <p class="deliv"><b>Consegna:</b> documento copy definitivo per canale × lingua, link con <code>?src</code> corretto per ciascuno. I gruppi Facebook italiani (i più grandi e attivi d'Europa nel settore) sono il canale a costo zero con più volume: prepararne una lista di almeno 15.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ FASE 3 ============ -->
+  <section class="phase" id="fase3" data-track="camp">
+    <div class="phase-head">
+      <h2>Fase 3 · Lancio e Amplificazione</h2>
+      <span class="range">Sett. 4–8 · 27 lug – 30 ago</span>
+      <span class="track-badge camp">Campagna</span>
+      <span class="pcount" data-pc="fase3"></span>
+    </div>
+
+    <p class="week-label">Settimana 4 · lun 27 lug – dom 02 ago — il lancio</p>
+    <ul class="rail">
+      <li class="ticket" data-task="t15" data-due="2026-07-27">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">LUN 27 LUG</span><span class="tag">Mktg</span></div>
+          <h4>Sequenza email/WhatsApp #1–#2–#3 pronta e testata (SLA 48h su ogni candidatura)</h4>
+          <p class="deliv"><b>Consegna:</b> #1 grazie+prossimi passi (subito), #2 candidatura in revisione + 1 insight (giorno 2), #3 esito. Template in IT/DE/EN, invio testato su indirizzo proprio.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t16" data-due="2026-07-28">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">MAR 28 LUG</span><span class="tag">Mktg</span></div>
+          <h4>🔥 LANCIO — pubblicazione scaglionata stesso giorno: LinkedIn + Facebook (Passione), Reels + TikTok (Edgy)</h4>
+          <p class="deliv"><b>Consegna:</b> 4 pubblicazioni live con link tracciati, link in bio aggiornati, prime risposte visibili in dashboard.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t17" data-due="2026-07-28">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">MAR 28 LUG</span><span class="tag">Mktg</span></div>
+          <h4>Messaggio WhatsApp inoltrabile alla rete personale ("Conosci qualcuno con un locale? Giragli questo.")</h4>
+          <p class="deliv"><b>Consegna:</b> inviato ad almeno 30 contatti diretti, <code>?src=wa</code> attivo.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t18" data-due="2026-07-30">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">GIO 30 LUG</span><span class="tag">Mktg</span></div>
+          <h4>Email alle associazioni di Svizzera e Italia: GastroSuisse, GastroZürich, <b>GastroTicino</b>, FIPE — "ricerca sul carico amministrativo", risultati aggregati offerti gratis (DEHOGA, UMIH, Hostelería rinviate all'Onda successiva)</h4>
+          <p class="deliv"><b>Consegna:</b> 4 email personalizzate inviate, follow-up in agenda a +7 giorni. GastroTicino è la porta naturale della Svizzera italofona: lì il video parla la lingua giusta senza sottotitoli.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t19" data-due="2026-08-02">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">DOM 02 AGO</span><span class="tag">Mktg</span></div>
+          <h4>QR code stampati e consegnati nei locali amici (area Zürich)</h4>
+          <p class="deliv"><b>Consegna:</b> almeno 5 locali coperti, <code>?src=qr</code> attivo, foto della posa per social proof futura.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t20" data-due="2026-07-31">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 31 LUG</span><span class="tag">Mktg</span></div>
+          <h4>Prima lettura KPI a 72h dal lancio: hook rate, completion, CTR, completamento questionario</h4>
+          <p class="deliv"><b>Consegna:</b> nota scritta con i 4 numeri vs soglie della tabella KPI; se hook rate &lt; 70%, preparare il primo gancio sostitutivo per lunedì.</p>
+        </div>
+      </li>
+    </ul>
+
+    <p class="week-label">Settimane 5–8 · lun 03 – dom 30 ago — routine di amplificazione</p>
+    <ul class="rail">
+      <li class="ticket" data-task="t21" data-due="2026-08-24">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">OGNI LUN · 03 / 10 / 17 / 24 AGO</span><span class="rec">Ricorrente</span><span class="tag">Mktg</span></div>
+          <h4>Rotazione hook settimanale: sostituire il gancio col migliore della hook bank secondo i KPI della settimana precedente</h4>
+          <p class="deliv"><b>Consegna:</b> 4 rotazioni eseguite e annotate (quale hook, quale risultato). Spuntare a fine ciclo (24 ago).</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t22" data-due="2026-08-30">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">CONTINUATIVO · FINE 30 AGO</span><span class="rec">Ricorrente</span><span class="tag">Mktg</span></div>
+          <h4>Outreach gruppi Facebook ristoratori: 2–3 gruppi a settimana in IT (Svizzera + Italia) + 1–2 in DE (post scritto, tono da pari — sez. 7.4)</h4>
+          <p class="deliv"><b>Consegna:</b> almeno 8–12 gruppi coperti nel mese, registro di quali gruppi rispondono meglio (<code>?src=fb</code>).</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t23" data-due="2026-08-07">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">PRIMA CARD ENTRO VEN 07 AGO</span><span class="tag">Content</span></div>
+          <h4>Card social proof con citazioni anonime dalle risposte aperte ("Odio le etichette del sabato sera — chef de partie, Zurigo"), per lingua</h4>
+          <p class="deliv"><b>Consegna:</b> template card riutilizzabile + prime 3 card pubblicate; poi 1–2 a settimana appena arrivano citazioni forti.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="gate" data-gate="r2">
+      <div class="stamp">R2</div>
+      <div>
+        <h4>Gate R2 · dom 09 ago — Ricalibrare le soglie KPI</h4>
+        <p class="crit">Due settimane di dati reali: aggiornare le soglie della tabella KPI (regola del documento: "aggiornare dopo le prime 2 settimane"). Verificare hook rate ≥70%, completamento questionario ≥60%. Se il CTR è sotto l'1,5%: rivedere CTA e link in bio prima di toccare il video. Decisione: le soglie restano o si ricalibrano — e su quali numeri.</p>
+        <div class="gate-controls">
+          <select aria-label="Decisione gate R2">
+            <option value="">— Decisione</option>
+            <option value="go">GO</option>
+            <option value="rivedi">RIVEDI</option>
+            <option value="nogo">NO-GO</option>
+          </select>
+          <textarea placeholder="Nuove soglie, hook vincente finora, cosa cambia..." aria-label="Note gate R2"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate" data-gate="r3">
+      <div class="stamp">R3</div>
+      <div>
+        <h4>Gate R3 · dom 30 ago — Revisione funnel mensile + decisione ads</h4>
+        <p class="crit">Numeri sul tavolo: risposte totali vs traiettoria 150–300 · % email totale (pilot + report) ≥35% · candidature qualificate vs cap 10/lingua. Decisione chiave: attivare budget ads sul cut 15s (solo-hook) per le sorgenti che convertono meglio, oppure restare organici un altro mese. <b>Scelta di trasparenza permanente: nessun pixel di retargeting sulla landing</b> — chi risponde alla ricerca non viene inseguito; la coerenza col messaggio "senza secondi fini" vale più della audience. GO = traiettoria ok · RIVEDI = spingere ads o nuovi canali · NO-GO = fermarsi e rivedere messaggio/target prima di spendere.</p>
+        <div class="gate-controls">
+          <select aria-label="Decisione gate R3">
+            <option value="">— Decisione</option>
+            <option value="go">GO</option>
+            <option value="rivedi">RIVEDI</option>
+            <option value="nogo">NO-GO</option>
+          </select>
+          <textarea placeholder="Risposte a oggi, % email, budget ads sì/no e quanto..." aria-label="Note gate R3"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FASE 4 ============ -->
+  <section class="phase" id="fase4" data-track="camp">
+    <div class="phase-head">
+      <h2>Fase 4 · Selezione e Onboarding</h2>
+      <span class="range">Sett. 6–10 · 10 ago – 13 set</span>
+      <span class="track-badge camp">Campagna</span>
+      <span class="pcount" data-pc="fase4"></span>
+    </div>
+    <ul class="rail">
+      <li class="ticket" data-task="t24" data-due="2026-08-10">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">LUN 10 AGO</span><span class="tag">Pilot</span></div>
+          <h4>Calendario call di selezione (15 min): slot settimanali fissi pubblicati, prenotabili dal link nell'email #3</h4>
+          <p class="deliv"><b>Consegna:</b> almeno 6 slot/settimana protetti in agenda; criteri di selezione scritti (tipo locale, brigata, disponibilità feedback).</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t25" data-due="2026-09-13">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">CONTINUATIVO · SLA 48H</span><span class="rec">Ricorrente</span><span class="tag">Pilot</span></div>
+          <h4>Call di selezione a rullo — ogni candidatura contattata entro 48h; la call dà consigli utili anche a chi non entra (regola d'oro del funnel)</h4>
+          <p class="deliv"><b>Consegna:</b> registro candidature con esito (selezionato / lista d'attesa) e motivazione. Spuntare quando il flusso è a regime.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t26" data-due="2026-09-04">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">ENTRO VEN 04 SET</span><span class="tag">Pilot</span></div>
+          <h4>Onboarding white-glove dei primi 10 pilot: priorità alle cucine italofone (Svizzera IT + Italia); pilot DE accettati se il referente lavora bene in EN o IT (l'onboarding lo fai tu — la lingua dell'onboarding conta)</h4>
+          <p class="deliv"><b>Consegna:</b> 10 cucine attive con almeno 3 moduli configurati ciascuna. Aspettative reciproche (sez. 5.3) accettate esplicitamente.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t27" data-due="2026-09-13">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">ROLLING · +14GG DA OGNI AVVIO</span><span class="rec">Ricorrente</span><span class="tag">Pilot</span></div>
+          <h4>Check-in settimana 2 per ogni pilot attivato: uso reale, blocchi, prima richiesta di funzione in roadmap</h4>
+          <p class="deliv"><b>Consegna:</b> nota di check-in per ciascun pilot; segnali di abbandono intercettati subito.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t28" data-due="2026-09-13">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">PRIMA USCITA ENTRO DOM 13 SET</span><span class="tag">Mktg</span></div>
+          <h4>Lista d'attesa in nurturing: email mensile con 1 insight dai dati raccolti (il valore prima della richiesta)</h4>
+          <p class="deliv"><b>Consegna:</b> prima email di nurturing inviata; template mensile pronto per le uscite successive.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ FASE 5 ============ -->
+  <section class="phase" id="fase5">
+    <div class="phase-head">
+      <h2>Fase 5 · Prova e Racconto</h2>
+      <span class="range">Sett. 10–13 · 07 set – 04 ott</span>
+      <span class="pcount" data-pc="fase5"></span>
+    </div>
+    <ul class="rail">
+      <li class="ticket" data-task="t29" data-due="2026-09-14">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">DAL LUN 14 SET</span><span class="tag">Pilot</span></div>
+          <h4>Call di metà pilot (20 min) con i primi pilot attivati: feedback strutturato, richieste in roadmap, primi numeri d'uso</h4>
+          <p class="deliv"><b>Consegna:</b> verbale per ciascuna call; le richieste dei piloti entrano in roadmap con priorità (IKEA effect in azione).</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t30" data-due="2026-09-18">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 18 SET</span><span class="tag">Dev</span></div>
+          <h4>Primo report AI aggregato dalle risposte reali: pattern per lingua, citazioni più forti, priorità di sviluppo suggerite</h4>
+          <p class="deliv"><b>Consegna:</b> report generato e archiviato — è l'asset per contenuto, prodotto e investitori.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t31" data-due="2026-09-23">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">MER 23 SET</span><span class="tag">Content</span></div>
+          <h4>Pubblicare 3 insight come contenuto: "Cosa ci hanno detto N cucine" (LinkedIn + card social, IT/DE/EN)</h4>
+          <p class="deliv"><b>Consegna:</b> 3 post pubblicati; il contenuto riporta traffico al questionario (il volano gira).</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t33" data-due="2026-09-25">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 25 SET</span><span class="tag">Mktg</span></div>
+          <h4>Invio del report "Cosa ci hanno detto le cucine" a chi ha lasciato l'email solo per riceverlo (<code>report_only</code>) — la promessa mantenuta</h4>
+          <p class="deliv"><b>Consegna:</b> email con il report vero, senza pitch. Una sola riga in chiusura, dichiarata e leggera: "Se un giorno vuoi provare quello che stiamo costruendo, il Test Drive esiste. Nessuna fretta." Questo è il primo atto commerciale: mantenere la parola.</p>
+        </div>
+      </li>
+      <li class="ticket" data-task="t32" data-due="2026-10-02">
+        <label class="tick"><input type="checkbox" aria-label="Segna come fatta"><span class="box"></span></label>
+        <div class="tbody">
+          <div class="trow"><span class="due">VEN 02 OTT</span><span class="tag">Strategy</span></div>
+          <h4>Preparazione Onda 2 (DACH pieno + valutazione FR/ES): piano canali DE, verifica requisiti normativi locali, e decisione su come dare voce al tedesco — voice-over professionale, doppiaggio AI di qualità, o un volto partner madrelingua</h4>
+          <p class="deliv"><b>Consegna:</b> documento Onda 2 con casi studio svizzeri come apriporta e budget stimato per la voce DE. Regola: nel DACH si entra da forti (con numeri veri), mai con un parlato incerto. FR/ES si aprono solo dopo, con lo stesso criterio.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="gate" data-gate="r4">
+      <div class="stamp">R4</div>
+      <div>
+        <h4>Gate R4 · dom 04 ott — Chiusura Onda 1 e Go Onda 2</h4>
+        <p class="crit">Bilancio finale contro la tabella KPI: risposte 150–300 · pilot attivi 10–20 · retention pilot in traiettoria ≥70% · 3–5 casi studio in costruzione. GO = si apre l'Onda 2 con i numeri svizzeri in mano ("se funziona a Zurigo, funziona ovunque"). RIVEDI = Onda 1 si estende di 4–6 settimane per consolidare i pilot. NO-GO = i dati dicono che il messaggio o il target vanno riprogettati prima di espandere.</p>
+        <div class="gate-controls">
+          <select aria-label="Decisione gate R4">
+            <option value="">— Decisione</option>
+            <option value="go">GO</option>
+            <option value="rivedi">RIVEDI</option>
+            <option value="nogo">NO-GO</option>
+          </select>
+          <textarea placeholder="Numeri finali Onda 1, decisione Onda 2, data di lancio..." aria-label="Note gate R4"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KPI ============ -->
+  <section class="kpi">
+    <h2>Tabella KPI — le soglie dei gate</h2>
+    <table>
+      <thead><tr><th>Livello</th><th>Metrica</th><th>Soglia</th><th>Quando si legge</th></tr></thead>
+      <tbody>
+        <tr><td>Video</td><td>Hook rate (view ≥3s / impression)</td><td class="thr">≥ 70%</td><td>Ogni lunedì</td></tr>
+        <tr><td>Video</td><td>Completion rate sui cut 30s</td><td class="thr">≥ 40%</td><td>Ogni lunedì</td></tr>
+        <tr><td>Video</td><td>CTR sul link</td><td class="thr">≥ 1,5% org · ≥ 2,5% ads</td><td>Ogni lunedì</td></tr>
+        <tr><td>Landing</td><td>Completamento questionario (di chi inizia)</td><td class="thr">≥ 60%</td><td>R2, poi mensile</td></tr>
+        <tr><td>Funnel</td><td>Risposte totali Onda 1</td><td class="thr">150–300</td><td>R3, R4</td></tr>
+        <tr><td>Funnel</td><td>% risposte con email (candidatura)</td><td class="thr">≥ 35%</td><td>R3</td></tr>
+        <tr><td>Pilot</td><td>Pilot attivati Onda 1</td><td class="thr">10–20</td><td>R4</td></tr>
+        <tr><td>Pilot</td><td>Retention a 12 settimane (uso attivo)</td><td class="thr">≥ 70%</td><td>Post-R4</td></tr>
+        <tr><td>Pilot</td><td>Conversione post-pilot (intent dichiarato)</td><td class="thr">≥ 40%</td><td>Post-R4</td></tr>
+        <tr><td>Dato oro</td><td>Sorgente/tono che converte per segmento</td><td class="thr">dashboard src × ruolo</td><td>Continuo</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <span class="savenote" id="saveNote">Avanzamento salvato automaticamente su questo dispositivo.</span>
+  <button class="reset" id="resetBtn">Azzera avanzamento</button>
+</footer>
+
+<script>
+(function(){
+  var KEY='staffmeal_percorso_unico_v2';
+  var state={tasks:{},gates:{},cancelli:{}};
+  var TOTAL=41;            // 8 sviluppo (d01-d08) + 33 campagna
+  var saveTimer=null;
+  var currentFilter='all';
+  var currentTrack='all';
+
+  function todayStr(){
+    var d=new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  function note(t){ var n=document.getElementById('saveNote'); if(n) n.textContent=t; }
+
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(function(){
+      try{ localStorage.setItem(KEY, JSON.stringify(state)); note('Avanzamento salvato automaticamente su questo dispositivo.'); }
+      catch(e){ note('Salvataggio non disponibile in questa sessione.'); }
+    },400);
+  }
+
+  function trackOf(el){ return el.getAttribute('data-track') || 'camp'; }
+
+  function styleSelect(sel){
+    sel.classList.remove('d-go','d-rivedi','d-nogo');
+    if(sel.value==='go')sel.classList.add('d-go');
+    if(sel.value==='rivedi')sel.classList.add('d-rivedi');
+    if(sel.value==='nogo')sel.classList.add('d-nogo');
+  }
+
+  // ---- CANCELLI (Definition of Done) ----
+  function applyCancelli(){
+    var ok=0;
+    document.querySelectorAll('.cancel').forEach(function(el){
+      var id=el.getAttribute('data-cancel');
+      var v=state.cancelli[id]||'';
+      el.classList.remove('st-ok','st-warn','st-no');
+      el.querySelectorAll('.cbtn').forEach(function(b){
+        b.classList.remove('on-ok','on-warn','on-no');
+        if(b.getAttribute('data-v')===v){
+          b.classList.add(v==='ok'?'on-ok':v==='warn'?'on-warn':'on-no');
+        }
+      });
+      if(v==='ok'){el.classList.add('st-ok');ok++;}
+      else if(v==='warn')el.classList.add('st-warn');
+      else if(v==='no')el.classList.add('st-no');
+    });
+    // Verdetto Definition of Done
+    var vEl=document.getElementById('dodVerdict');
+    var stamp=document.getElementById('dodStamp');
+    var txt=document.getElementById('dodText');
+    var gd=document.getElementById('gatesDone');
+    if(gd) gd.textContent=ok;
+    if(vEl){
+      vEl.classList.remove('v-ok','v-no');
+      if(ok===6){
+        vEl.classList.add('v-ok');
+        stamp.textContent='Testabile';
+        txt.innerHTML='<b>6/6 cancelli superati.</b> Il modulo Operatore può entrare in un ristorante reale. Puoi far partire l\'onboarding del primo pilota (Fase 4).';
+      } else {
+        vEl.classList.add('v-no');
+        stamp.textContent='Non pronto';
+        txt.innerHTML='<b>'+ok+'/6 cancelli superati.</b> Il modulo Operatore non è ancora testabile in un ristorante. Chiudi i buchi segnati, poi rivaluta. La sicurezza viene dal cancello, non dalla fretta.';
+      }
+    }
+  }
+
+  // ---- PROGRESSO + CONTATORI PER BINARIO ----
+  function updateProgress(){
+    var doneAll=0, doneDev=0, doneCamp=0;
+    document.querySelectorAll('.ticket').forEach(function(el){
+      var id=el.getAttribute('data-task');
+      if(state.tasks[id]){
+        doneAll++;
+        if(trackOf(el)==='dev') doneDev++; else doneCamp++;
+      }
+    });
+    var pct=Math.round(doneAll/TOTAL*100);
+    document.getElementById('gaugeFill').style.width=pct+'%';
+    document.getElementById('gaugeText').textContent=doneAll+' / '+TOTAL+' passi completati';
+    document.getElementById('gaugePct').textContent=pct+'%';
+    document.getElementById('gauge').setAttribute('aria-valuenow',doneAll);
+    var dv=document.getElementById('devDone'); if(dv) dv.textContent=doneDev;
+    var cv=document.getElementById('campDone'); if(cv) cv.textContent=doneCamp;
+    document.querySelectorAll('.pcount').forEach(function(pc){
+      var sec=document.getElementById(pc.getAttribute('data-pc'));
+      if(!sec) return;
+      var all=sec.querySelectorAll('.ticket').length;
+      var d=sec.querySelectorAll('.ticket.done').length;
+      pc.textContent=d+'/'+all;
+    });
+  }
+
+  // ---- PROSSIMO PASSO: prima ticket non fatta, in ordine di DOM (cronologico), nel binario visibile ----
+  function updateNextUp(){
+    document.querySelectorAll('.ticket.isnext').forEach(function(el){el.classList.remove('isnext');});
+    var box=document.getElementById('nextUp');
+    var title=document.getElementById('nextTitle');
+    var meta=document.getElementById('nextMeta');
+    var tickets=Array.prototype.slice.call(document.querySelectorAll('.ticket'));
+    var next=null;
+    for(var i=0;i<tickets.length;i++){
+      var el=tickets[i];
+      if(state.tasks[el.getAttribute('data-task')]) continue;          // già fatta
+      if(currentTrack!=='all' && trackOf(el)!==currentTrack) continue;  // fuori dal binario visibile
+      next=el; break;
+    }
+    if(next){
+      box.classList.remove('alldone');
+      next.classList.add('isnext');
+      var h=next.querySelector('h4');
+      var due=next.querySelector('.due');
+      var tr=trackOf(next);
+      title.textContent=h?h.textContent:'—';
+      meta.textContent=(due?due.textContent+' · ':'')+(tr==='dev'?'Binario Sviluppo':'Binario Campagna');
+      box.setAttribute('data-scroll',next.getAttribute('data-task'));
+    } else {
+      box.classList.add('alldone');
+      title.textContent=currentTrack==='all'?'Tutti i passi completati. Onda 1 servita. 🔥':'Binario completato in questa vista.';
+      meta.textContent=currentTrack==='all'?'Bilancio finale al gate R4, poi si apre l\'Onda 2.':'Passa a "Tutto" per vedere il resto del percorso.';
+      box.removeAttribute('data-scroll');
+    }
+  }
+
+  // ---- FILTRO STATO ----
+  function applyFilter(f){
+    currentFilter=f;
+    document.querySelectorAll('.fbtn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-filter')===f);
+    });
+    refreshVisibility();
+  }
+
+  // ---- SWITCH BINARIO ----
+  function applyTrack(t){
+    currentTrack=t;
+    document.querySelectorAll('.tsbtn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-track')===t);
+    });
+    var hint=document.getElementById('trackHint');
+    if(hint){
+      hint.textContent = t==='all' ? 'Vista completa: entrambi i binari in ordine cronologico.'
+        : t==='dev' ? 'Solo Sviluppo: modulo Operatore + i 6 cancelli. Il binario che rende il prodotto testabile.'
+        : 'Solo Campagna: il questionario che scopre il dolore n.1 e trova i piloti.';
+    }
+    // mostra/nascondi intere sezioni fase per binario
+    document.querySelectorAll('.phase').forEach(function(sec){
+      var st=sec.getAttribute('data-track')||'camp';
+      sec.style.display=(t==='all'||st===t)?'':'none';
+    });
+    refreshVisibility();
+    updateNextUp();
+  }
+
+  // combina filtro stato + binario sui ticket
+  function refreshVisibility(){
+    document.querySelectorAll('.ticket').forEach(function(el){
+      var done=el.classList.contains('done');
+      var passState = currentFilter==='all' || (currentFilter==='done'&&done) || (currentFilter==='open'&&!done);
+      var passTrack = currentTrack==='all' || trackOf(el)===currentTrack;
+      el.style.display=(passState&&passTrack)?'':'none';
+    });
+  }
+
+  function applyState(){
+    var today=todayStr();
+    document.querySelectorAll('.ticket').forEach(function(el){
+      var id=el.getAttribute('data-task');
+      var cb=el.querySelector('input[type=checkbox]');
+      var done=!!state.tasks[id];
+      cb.checked=done;
+      el.classList.toggle('done',done);
+      var due=el.getAttribute('data-due');
+      el.classList.toggle('overdue', !done && due && due<today);
+    });
+    document.querySelectorAll('.gate').forEach(function(el){
+      var id=el.getAttribute('data-gate');
+      var g=state.gates[id]||{};
+      var sel=el.querySelector('select');
+      var ta=el.querySelector('textarea');
+      if(sel){ sel.value=g.decision||''; styleSelect(sel); }
+      if(ta){ ta.value=g.note||''; }
+    });
+    applyCancelli();
+    updateProgress();
+    applyTrack(currentTrack);
+    applyFilter(currentFilter);
+    updateNextUp();
+  }
+
+  // ===== LISTENERS =====
+  document.querySelectorAll('.ticket input[type=checkbox]').forEach(function(cb){
+    cb.addEventListener('change',function(){
+      var el=cb.closest('.ticket');
+      state.tasks[el.getAttribute('data-task')]=cb.checked;
+      el.classList.toggle('done',cb.checked);
+      if(cb.checked) el.classList.remove('overdue');
+      else { var due=el.getAttribute('data-due'); if(due&&due<todayStr()) el.classList.add('overdue'); }
+      updateProgress();
+      refreshVisibility();
+      updateNextUp();
+      save();
+    });
+  });
+
+  document.querySelectorAll('.cancel .cbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      var el=b.closest('.cancel');
+      var id=el.getAttribute('data-cancel');
+      var v=b.getAttribute('data-v');
+      state.cancelli[id]=(state.cancelli[id]===v)?'':v; // toggle
+      applyCancelli();
+      save();
+    });
+  });
+
+  document.querySelectorAll('.gate').forEach(function(g){
+    var id=g.getAttribute('data-gate');
+    var sel=g.querySelector('select');
+    var ta=g.querySelector('textarea');
+    if(sel) sel.addEventListener('change',function(){
+      state.gates[id]=state.gates[id]||{}; state.gates[id].decision=sel.value; styleSelect(sel); save();
+    });
+    if(ta) ta.addEventListener('input',function(){
+      state.gates[id]=state.gates[id]||{}; state.gates[id].note=ta.value; save();
+    });
+  });
+
+  document.querySelectorAll('.fbtn').forEach(function(b){
+    b.addEventListener('click',function(){ applyFilter(b.getAttribute('data-filter')); updateNextUp(); });
+  });
+  document.querySelectorAll('.tsbtn').forEach(function(b){
+    b.addEventListener('click',function(){ applyTrack(b.getAttribute('data-track')); });
+  });
+
+  // Prossimo passo → scrolla e evidenzia
+  var nu=document.getElementById('nextUp');
+  function scrollToNext(){
+    var tid=nu.getAttribute('data-scroll');
+    if(!tid) return;
+    var t=document.querySelector('.ticket[data-task="'+tid+'"]');
+    if(t){ t.scrollIntoView({behavior:'smooth',block:'center'}); }
+  }
+  nu.addEventListener('click',scrollToNext);
+  nu.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); scrollToNext(); } });
+
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    if(!confirm('Azzerare tutto l\'avanzamento (passi, cancelli e note dei gate)?')) return;
+    state={tasks:{},gates:{},cancelli:{}};
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    applyState();
+    note('Avanzamento azzerato.');
+  });
+
+  // ===== LOAD =====
+  (async function(){
+    try{
+      var raw=localStorage.getItem(KEY); var r=raw?{value:raw}:null;
+      if(r&&r.value){
+        var s=JSON.parse(r.value);
+        state.tasks=s.tasks||{};
+        state.gates=s.gates||{};
+        state.cancelli=s.cancelli||{};
+      }
+    }catch(e){ /* prima apertura */ }
+    applyState();
+  })();
+})();
+</script>
+</body>
+</html>

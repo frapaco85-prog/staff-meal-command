@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Meal — Il Passe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:#141517;      /* acciaio scuro */
+    --char2:#1D1E21;
+    --steel:#26282C;     /* superficie stazione */
+    --steel-lo:#202226;
+    --edge:#34363B;      /* bordo caldo acciaio */
+    --edge-lo:#2B2D31;
+    --ink:#EDEEEA;       /* testo su scuro */
+    --dim:#8A8D86;       /* testo attenuato */
+    --dim-lo:#5F625C;
+    --flame:#F0510C;     /* brace: SOLO ciò che richiede attenzione ora */
+    --flame-hi:#FF7A2E;
+    --flame-deep:#B23306;
+    --ok:#3FB86B;        /* servito / verde */
+    --warn:#E0A32B;      /* parziale / da verificare */
+    --steelblue:#7E97AD; /* congelato / neutro freddo */
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --disp:'Anton',Impact,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+  body{
+    font-family:var(--body);
+    background:
+      radial-gradient(120% 80% at 50% -10%, #1E2023 0%, var(--char) 55%, #0F1012 100%);
+    color:var(--ink);line-height:1.5;font-size:15px;min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* ---------- BARRA PASSE (top) ---------- */
+  .passbar{border-bottom:1px solid var(--edge);background:rgba(20,21,23,.7);backdrop-filter:blur(6px);position:sticky;top:0;z-index:20}
+  .passbar .wrap{display:flex;align-items:center;gap:14px;padding-top:14px;padding-bottom:14px}
+  .brandmark{font-family:var(--disp);font-size:20px;letter-spacing:.03em;text-transform:uppercase;line-height:1}
+  .brandmark .fl{color:var(--flame)}
+  .passbar .tagline{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+  .passbar .clock{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;line-height:1.5}
+  .passbar .clock b{color:var(--ink);font-weight:600}
+
+  /* ---------- HERO: STATO ORA ---------- */
+  header{padding:34px 0 10px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--flame);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:9px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--flame)}
+  h1{font-family:var(--disp);font-size:clamp(30px,5.4vw,52px);line-height:1;letter-spacing:.01em;text-transform:uppercase;margin-bottom:6px}
+  .h1sub{font-family:var(--mono);font-size:13px;color:var(--dim);margin-bottom:26px}
+
+  /* riga di stato: 4 quadranti "ticket" */
+  .staterow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--edge);border:1px solid var(--edge)}
+  .qd{background:var(--steel);padding:15px 16px 14px;position:relative;min-height:104px;display:flex;flex-direction:column}
+  .qd .qlab{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:auto}
+  .qd .qval{font-family:var(--disp);font-size:clamp(22px,3.4vw,30px);line-height:1;letter-spacing:.01em;margin-top:8px}
+  .qd .qhint{font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-top:5px;line-height:1.4}
+  .qd.accent .qval{color:var(--flame)}
+  .qd.accent::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--flame)}
+  .qd .edit{position:absolute;top:11px;right:12px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--dim-lo);text-transform:uppercase;background:none;border:none;cursor:pointer;padding:2px 4px}
+  .qd .edit:hover{color:var(--flame-hi)}
+  @media(max-width:720px){.staterow{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---------- PROSSIMA AZIONE ---------- */
+  .nextband{display:flex;align-items:stretch;gap:0;margin:26px 0 8px;border:1px solid var(--flame-deep);background:linear-gradient(100deg,rgba(240,81,12,.14),rgba(240,81,12,.03) 60%,transparent)}
+  .nextband .nb-mark{background:var(--flame);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);padding:16px 8px;display:flex;align-items:center;justify-content:center;text-align:center}
+  .nextband .nb-body{flex:1;padding:16px 18px;min-width:0}
+  .nextband .nb-body h3{font-size:16px;font-weight:700;line-height:1.3;margin-bottom:4px}
+  .nextband .nb-body .nb-meta{font-family:var(--mono);font-size:11px;color:var(--flame-hi)}
+  .nextband .nb-edit{align-self:center;margin-right:14px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--edge);color:var(--dim);cursor:pointer;padding:7px 11px;flex-shrink:0}
+  .nextband .nb-edit:hover{border-color:var(--flame);color:var(--flame-hi)}
+
+  /* ---------- STAZIONI (link) ---------- */
+  .section-lab{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:38px 0 14px;display:flex;align-items:center;gap:12px}
+  .section-lab::after{content:"";flex:1;height:1px;background:var(--edge)}
+  .stations{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:860px){.stations{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.stations{grid-template-columns:1fr}}
+  .station{
+    display:flex;flex-direction:column;gap:0;text-decoration:none;color:inherit;
+    background:linear-gradient(180deg,var(--steel),var(--steel-lo));
+    border:1px solid var(--edge);padding:0;position:relative;overflow:hidden;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .station:hover{border-color:var(--flame);transform:translateY(-2px)}
+  .station:focus-visible{outline:2px solid var(--flame);outline-offset:2px}
+  .st-top{display:flex;align-items:center;gap:11px;padding:15px 16px 12px}
+  .st-ico{width:38px;height:38px;flex-shrink:0;border:1px solid var(--edge);display:flex;align-items:center;justify-content:center;background:var(--char2)}
+  .st-ico svg{width:20px;height:20px}
+  .st-name{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:1.2}
+  .st-desc{padding:0 16px 15px;font-size:12.5px;color:var(--dim);line-height:1.5;flex:1}
+  .st-foot{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--edge-lo);background:rgba(0,0,0,.15)}
+  .st-status{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+  .st-status .dot{width:7px;height:7px;border-radius:50%}
+  .st-go{font-family:var(--mono);font-size:16px;color:var(--dim);transition:color .18s,transform .18s}
+  .station:hover .st-go{color:var(--flame);transform:translateX(3px)}
+  .d-ok{background:var(--ok)} .t-ok{color:var(--ok)}
+  .d-warn{background:var(--warn)} .t-warn{color:var(--warn)}
+  .d-flame{background:var(--flame);box-shadow:0 0 0 3px rgba(240,81,12,.2)} .t-flame{color:var(--flame-hi)}
+  .d-cold{background:var(--steelblue)} .t-cold{color:var(--steelblue)}
+  /* stazione senza link ancora impostato */
+  .station.unset{cursor:default}
+  .station.unset:hover{border-color:var(--edge);transform:none}
+  .station.unset .st-go{display:none}
+  .station.unset .st-top,.station.unset .st-desc{opacity:.5}
+  .setlink{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--edge);color:var(--flame-hi);cursor:pointer;padding:6px 10px}
+  .setlink:hover{border-color:var(--flame)}
+
+  /* ---------- REGOLA D'ORO (footer disciplina) ---------- */
+  .creed{margin:40px 0 14px;border:1px solid var(--edge);border-left:4px solid var(--flame);background:var(--steel-lo);padding:18px 20px}
+  .creed h4{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame-hi);margin-bottom:10px}
+  .creed p{font-size:13px;color:var(--ink);margin-bottom:6px;line-height:1.6}
+  .creed p:last-child{margin-bottom:0}
+  .creed b{font-weight:600;color:#fff}
+  .creed .mono{font-family:var(--mono);font-size:12px;color:var(--flame-hi)}
+
+  footer{padding:8px 0 46px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+  .savenote{font-family:var(--mono);font-size:10.5px;color:var(--dim-lo)}
+  .savenote.flash{color:var(--ok)}
+
+  /* ---------- MODAL edit ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(8,9,10,.72);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .scrim.on{display:flex}
+  .modal{background:var(--char2);border:1px solid var(--edge);max-width:440px;width:100%;padding:22px}
+  .modal h4{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--flame-hi);margin-bottom:4px}
+  .modal .msub{font-size:12px;color:var(--dim);margin-bottom:16px;line-height:1.5}
+  .modal label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:12px 0 5px}
+  .modal input,.modal textarea{width:100%;font-family:var(--body);font-size:14px;padding:9px 11px;background:var(--steel);border:1px solid var(--edge);color:var(--ink);resize:vertical}
+  .modal input:focus,.modal textarea:focus{outline:none;border-color:var(--flame)}
+  .modal .mono-in{font-family:var(--mono);font-size:13px}
+  .modal-actions{display:flex;gap:9px;margin-top:20px}
+  .btn{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px;border:1px solid var(--edge);background:var(--steel);color:var(--ink);cursor:pointer;flex:1}
+  .btn:hover{border-color:var(--dim)}
+  .btn.primary{background:var(--flame);border-color:var(--flame);color:#fff}
+  .btn.primary:hover{background:var(--flame-hi);border-color:var(--flame-hi)}
+  .btn:focus-visible{outline:2px solid var(--flame);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- BARRA PASSE -->
+<div class="passbar">
+  <div class="wrap">
+    <span class="brandmark">STAFF&nbsp;<span class="fl">MEAL</span></span>
+    <span class="tagline">Il Passe · Centro di comando</span>
+    <div class="clock"><b id="clockTime">—</b><br><span id="clockDate">—</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO: STATO ORA -->
+  <header>
+    <p class="eyebrow">Stato ora</p>
+    <h1>Dove sei nel progetto</h1>
+    <p class="h1sub">Un colpo d'occhio: cosa è canonico, quanti cancelli mancano, dov'è la campagna. Poi le stazioni per arrivarci. Aggiorna i valori tu quando cambiano — restano salvati su questo dispositivo.</p>
+
+    <div class="staterow">
+      <div class="qd" data-edit="commit">
+        <button class="edit" aria-label="Modifica commit">edit</button>
+        <div class="qlab">Codice canonico</div>
+        <div class="qval mono" id="vCommit" style="font-family:var(--mono);font-size:22px">7daf47b</div>
+        <div class="qhint" id="vCommitHint">doc: 518f514</div>
+      </div>
+      <div class="qd accent" data-edit="gates">
+        <button class="edit" aria-label="Modifica cancelli">edit</button>
+        <div class="qlab">Cancelli Operatore</div>
+        <div class="qval" id="vGates">0/6</div>
+        <div class="qhint">superati · modulo attivo</div>
+      </div>
+      <div class="qd" data-edit="camp">
+        <button class="edit" aria-label="Modifica campagna">edit</button>
+        <div class="qlab">Campagna · risposte</div>
+        <div class="qval" id="vCamp">0</div>
+        <div class="qhint" id="vCampHint">obiettivo 150–300</div>
+      </div>
+      <div class="qd" data-edit="pilot">
+        <button class="edit" aria-label="Modifica pilot">edit</button>
+        <div class="qlab">Pilot attivi</div>
+        <div class="qval" id="vPilot">0</div>
+        <div class="qhint">obiettivo 10–20</div>
+      </div>
+    </div>
+
+    <!-- PROSSIMA AZIONE -->
+    <div class="nextband">
+      <div class="nb-mark">Prossimo<br>passo</div>
+      <div class="nb-body">
+        <h3 id="vNextTitle">Audit d02 — mappare il modulo Operatore coi 6 cancelli</h3>
+        <div class="nb-meta" id="vNextMeta">Binario Sviluppo · trasforma "buchi strutturali" in una lista</div>
+      </div>
+      <button class="nb-edit" data-edit="next">edit</button>
+    </div>
+  </header>
+
+  <!-- STAZIONI -->
+  <div class="section-lab">Le stazioni</div>
+  <div class="stations" id="stations"><!-- iniettate da JS --></div>
+
+  <!-- REGOLA D'ORO -->
+  <div class="creed">
+    <h4>La regola d'oro — leggila prima di aprire qualsiasi stazione</h4>
+    <p><b>Un solo fronte attivo alla volta, al 100%.</b> Attivo: modulo Operatore. Parallelo: la campagna. Tutto il resto è congelato — non si apre un prompt finché l'attivo non passa i 6 cancelli.</p>
+    <p><b>Niente entra in produzione senza cancello.</b> Il push su <span class="mono">main</span> è un atto deciso da te, con build verificata e deploy confermato. Mai un automatismo cieco.</p>
+    <p><b>La verità sta nei file versionati, non nelle chat.</b> <span class="mono">CLAUDE.md</span> e il tracker sono la memoria vera. Le conversazioni sono effimere; il repo no.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <span class="savenote" id="saveNote">Stato e link salvati automaticamente su questo dispositivo.</span>
+    <span class="savenote">NOI LAVORIAMO DURO 🔥</span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h4 id="modalTitle">Modifica</h4>
+    <p class="msub" id="modalSub"></p>
+    <div id="modalFields"></div>
+    <div class="modal-actions">
+      <button class="btn" id="mCancel">Annulla</button>
+      <button class="btn primary" id="mSave">Salva</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY='staffmeal_ilpasse_v1';
+
+  // --- Icone SVG (stroke, coerenti) ---
+  var IC={
+    repo:'<svg viewBox="0 0 24 24" fill="none" stroke="#EDEEEA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><circle cx="18" cy="18" r="3"/></svg>',
+    tracker:'<svg viewBox="0 0 24 24" fill="none" stroke="#EDEEEA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
+    db:'<svg viewBox="0 0 24 24" fill="none" stroke="#EDEEEA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>',
+    survey:'<svg viewBox="0 0 24 24" fill="none" stroke="#EDEEEA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2z"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="M9 12l2 2 4-4"/></svg>',
+    chat:'<svg viewBox="0 0 24 24" fill="none" stroke="#EDEEEA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    deploy:'<svg viewBox="0 0 24 24" fill="none" stroke="#EDEEEA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>'
+  };
+
+  // --- Le 6 stazioni: nome, descrizione, icona, stato di default, tipo link ---
+  var STATIONS=[
+    {id:'tracker', name:'Il Tracker', ic:'tracker', desc:'Il percorso completo: sviluppo + campagna, spuntabile. Ti dice sempre il prossimo passo.', status:{cls:'flame', txt:'da aprire ogni giorno'}, url:''},
+    {id:'repo', name:'Repo GitHub', ic:'repo', desc:'staff-meal · main. Il codice canonico e il CLAUDE.md che fa da ponte con Claude Code.', status:{cls:'ok', txt:'518f514 · sincronizzato'}, url:'https://github.com/frapaco85-prog/staff-meal'},
+    {id:'supabase', name:'Supabase', ic:'db', desc:'Backend EU-Frankfurt. Edge functions, tabelle, dashboard dati. Project dlmepbupyimkfvjhkhnj.', status:{cls:'ok', txt:'EU-Frankfurt · live'}, url:'https://supabase.com/dashboard/project/dlmepbupyimkfvjhkhnj'},
+    {id:'survey', name:'Questionario', ic:'survey', desc:'La survey PWA "Torna al Fuoco". Raccoglie risposte e candidature pilot. sondaggio.staffmeal.ch', status:{cls:'warn', txt:'in costruzione'}, url:''},
+    {id:'deploy', name:'Netlify', ic:'deploy', desc:'Il deploy live dell\'app. Ultimo push confermato dopo verifica build.', status:{cls:'ok', txt:'deploy confermato'}, url:''},
+    {id:'chat', name:'Chat strategia', ic:'chat', desc:'Questa conversazione: strategia, decisioni, generazione documenti. Bookmarkala nel browser.', status:{cls:'cold', txt:'effimera · il filo è nei file'}, url:''}
+  ];
+
+  var state={
+    fields:{
+      commit:'7daf47b', commitHint:'doc: 518f514',
+      gates:'0/6',
+      camp:'0', campHint:'obiettivo 150–300',
+      pilot:'0',
+      nextTitle:'Audit d02 — mappare il modulo Operatore coi 6 cancelli',
+      nextMeta:'Binario Sviluppo · trasforma "buchi strutturali" in una lista'
+    },
+    urls:{}
+  };
+  STATIONS.forEach(function(s){ state.urls[s.id]=s.url; });
+
+  var saveTimer=null;
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(function(){
+      try{ localStorage.setItem(KEY, JSON.stringify(state)); flash('Salvato ✓'); }
+      catch(e){ note('Salvataggio non disponibile in questa sessione.'); }
+    },300);
+  }
+  function note(t){ var n=document.getElementById('saveNote'); if(n){n.textContent=t;n.classList.remove('flash');} }
+  function flash(t){ var n=document.getElementById('saveNote'); if(n){n.textContent=t;n.classList.add('flash'); setTimeout(function(){n.classList.remove('flash');n.textContent='Stato e link salvati automaticamente su questo dispositivo.';},1400);} }
+
+  // --- Orologio ---
+  function tick(){
+    var d=new Date();
+    var hh=String(d.getHours()).padStart(2,'0'), mm=String(d.getMinutes()).padStart(2,'0');
+    var gg=['dom','lun','mar','mer','gio','ven','sab'][d.getDay()];
+    var months=['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+    document.getElementById('clockTime').textContent=hh+':'+mm;
+    document.getElementById('clockDate').textContent=gg+' '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+  }
+
+  // --- Render valori hero ---
+  function renderFields(){
+    var f=state.fields;
+    document.getElementById('vCommit').textContent=f.commit||'—';
+    document.getElementById('vCommitHint').textContent=f.commitHint||'';
+    document.getElementById('vGates').textContent=f.gates||'0/6';
+    document.getElementById('vCamp').textContent=f.camp||'0';
+    document.getElementById('vCampHint').textContent=f.campHint||'';
+    document.getElementById('vPilot').textContent=f.pilot||'0';
+    document.getElementById('vNextTitle').textContent=f.nextTitle||'—';
+    document.getElementById('vNextMeta').textContent=f.nextMeta||'';
+  }
+
+  // --- Render stazioni ---
+  function renderStations(){
+    var host=document.getElementById('stations');
+    host.innerHTML='';
+    STATIONS.forEach(function(s){
+      var url=state.urls[s.id]||'';
+      var el;
+      if(url){
+        el=document.createElement('a');
+        el.href=url; el.target='_blank'; el.rel='noopener noreferrer';
+        el.className='station';
+      } else {
+        el=document.createElement('div');
+        el.className='station unset';
+      }
+      var st=s.status;
+      el.innerHTML=
+        '<div class="st-top"><span class="st-ico">'+IC[s.ic]+'</span><span class="st-name">'+s.name+'</span></div>'+
+        '<div class="st-desc">'+s.desc+'</div>'+
+        '<div class="st-foot">'+
+          '<span class="st-status"><span class="dot d-'+st.cls+'"></span><span class="t-'+st.cls+'">'+st.txt+'</span></span>'+
+          (url? '<span class="st-go">→</span>' : '<button class="setlink" data-set="'+s.id+'">imposta link</button>')+
+        '</div>';
+      host.appendChild(el);
+    });
+    // bind "imposta link"
+    host.querySelectorAll('.setlink').forEach(function(b){
+      b.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation();
+        openLinkModal(b.getAttribute('data-set'));
+      });
+    });
+  }
+
+  // --- MODAL generico ---
+  var scrim=document.getElementById('scrim');
+  var mTitle=document.getElementById('modalTitle');
+  var mSub=document.getElementById('modalSub');
+  var mFields=document.getElementById('modalFields');
+  var pendingSave=null;
+
+  function openModal(title, sub, fieldsHTML, onSave){
+    mTitle.textContent=title; mSub.textContent=sub||'';
+    mFields.innerHTML=fieldsHTML;
+    pendingSave=onSave;
+    scrim.classList.add('on');
+    var first=mFields.querySelector('input,textarea'); if(first) first.focus();
+  }
+  function closeModal(){ scrim.classList.remove('on'); pendingSave=null; }
+  document.getElementById('mCancel').addEventListener('click',closeModal);
+  scrim.addEventListener('click',function(e){ if(e.target===scrim) closeModal(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&scrim.classList.contains('on')) closeModal(); });
+  document.getElementById('mSave').addEventListener('click',function(){ if(pendingSave) pendingSave(); });
+
+  // editor dei quadranti / next
+  function openFieldEditor(which){
+    var f=state.fields;
+    var cfg={
+      commit:{t:'Codice canonico',s:'L\'hash dell\'ultimo commit di CODICE (non doc-only). Verificalo con git log -1.',
+        rows:[['commit','Commit codice (hash breve)',f.commit,'mono'],['commitHint','Nota sotto (es. doc: 518f514)',f.commitHint,'']]},
+      gates:{t:'Cancelli Operatore',s:'Quanti dei 6 cancelli sono superati. Aggiorna quando l\'audit avanza.',
+        rows:[['gates','Cancelli superati (es. 2/6)',f.gates,'']]},
+      camp:{t:'Campagna · risposte',s:'Risposte al questionario raccolte finora.',
+        rows:[['camp','Risposte',f.camp,''],['campHint','Nota (es. obiettivo 150–300)',f.campHint,'']]},
+      pilot:{t:'Pilot attivi',s:'Cucine pilota attive in questo momento.',
+        rows:[['pilot','Pilot attivi',f.pilot,'']]},
+      next:{t:'Prossimo passo',s:'La singola cosa più importante da fare adesso. Cambiala ogni volta che avanzi.',
+        rows:[['nextTitle','Titolo del prossimo passo',f.nextTitle,''],['nextMeta','Dettaglio (binario · perché)',f.nextMeta,'']]}
+    }[which];
+    var html=cfg.rows.map(function(r){
+      var cls=r[3]==='mono'?'mono-in':'';
+      var val=(r[2]||'').replace(/"/g,'&quot;');
+      return '<label>'+r[1]+'</label><input class="'+cls+'" data-k="'+r[0]+'" value="'+val+'">';
+    }).join('');
+    openModal(cfg.t, cfg.s, html, function(){
+      mFields.querySelectorAll('input').forEach(function(i){ state.fields[i.getAttribute('data-k')]=i.value.trim(); });
+      renderFields(); save(); closeModal();
+    });
+  }
+
+  function openLinkModal(id){
+    var s=STATIONS.filter(function(x){return x.id===id;})[0];
+    var cur=(state.urls[id]||'').replace(/"/g,'&quot;');
+    openModal('Link — '+s.name, 'Incolla l\'URL di questa stazione. Resta salvato e diventa cliccabile.',
+      '<label>URL</label><input class="mono-in" data-k="url" value="'+cur+'" placeholder="https://...">',
+      function(){
+        var v=mFields.querySelector('input').value.trim();
+        state.urls[id]=v; renderStations(); save(); closeModal();
+      });
+  }
+
+  // bind edit dei quadranti
+  document.querySelectorAll('[data-edit]').forEach(function(el){
+    el.addEventListener('click',function(e){
+      // il quadrante intero è cliccabile via il bottone edit; evita doppioni
+      if(e.target.classList.contains('edit')||e.target.classList.contains('nb-edit')||el.classList.contains('qd')||el.classList.contains('nb-edit')){
+        e.preventDefault();
+        openFieldEditor(el.getAttribute('data-edit'));
+      }
+    });
+  });
+
+  // --- LOAD ---
+  (async function(){
+    tick(); setInterval(tick,15000);
+    try{
+      var raw=localStorage.getItem(KEY); var r=raw?{value:raw}:null;
+      if(r&&r.value){
+        var s=JSON.parse(r.value);
+        if(s.fields) Object.keys(s.fields).forEach(function(k){ state.fields[k]=s.fields[k]; });
+        if(s.urls) Object.keys(s.urls).forEach(function(k){ state.urls[k]=s.urls[k]; });
+      }
+    }catch(e){ /* prima apertura */ }
+    renderFields();
+    renderStations();
+  })();
+})();
+</script>
+</body>
+</html>
