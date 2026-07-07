@@ -233,6 +233,28 @@
   .precond ol{margin:0 0 0 20px;font-size:12.8px;line-height:1.65}
   .precond ol li{margin-bottom:3px}
   .precond .cand{font-size:12.5px;color:var(--flame-deep);margin-top:10px;font-weight:600}
+  .model{background:#F7F8F5;border:1px solid var(--line);border-left:5px solid #9AA6B2;padding:15px 18px;margin-bottom:16px}
+  .model h3{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5A6570;margin-bottom:9px}
+  .model .mrow{font-size:12.8px;line-height:1.55;margin-bottom:6px;color:var(--ink)}
+  .model .mrow:last-child{margin-bottom:0}
+  .model .mrow b{font-weight:600}
+  .model .mk{font-family:var(--mono);font-size:10.5px;color:var(--flame-deep);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+  .epic .order{font-family:var(--mono);font-size:11px;color:var(--flame-deep);letter-spacing:.04em;line-height:1.5;margin-bottom:10px}
+  .wrow{display:flex;gap:11px;padding:8px 0;border-top:1px solid var(--line);font-size:12.8px;line-height:1.5}
+  .wrow:first-of-type{border-top:none;padding-top:2px}
+  .wcode{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.02em;background:#EAECEA;color:#5A6570;padding:2px 8px;height:fit-content;flex-shrink:0;min-width:46px;text-align:center}
+  .wbody{flex:1;min-width:0;color:var(--ink)}
+  .wbody b{font-weight:600}
+  .wtag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);padding:1px 6px;margin-left:3px;white-space:nowrap}
+  .wtag.be{color:#7A5A2E;border-color:#E4D2B8;background:#F9F2E8}
+  .gap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}
+  .gap div{font-size:11.8px;line-height:1.55;padding:10px 12px;border:1px solid var(--line)}
+  .gap .has{background:#F0F6F1;border-color:#CDE4D4}
+  .gap .has b{color:var(--done);font-weight:600}
+  .gap .miss{background:#FDF1EC;border-color:#F3D3C4}
+  .gap .miss b{color:var(--flame-deep);font-weight:600}
+  @media(max-width:640px){.gap{grid-template-columns:1fr}}
+  .backlog .manifesto{font-family:var(--body);font-style:italic;font-size:13px;color:#5A6570;text-align:center;margin-top:20px;padding-top:15px;border-top:1px dashed #B9BBB2}
 </style>
 </head>
 <body>
@@ -925,6 +947,13 @@
     </div>
     <p class="fnote">Riquadro informativo, separato dal flusso a due binari. Queste voci NON sono passi spuntabili e NON entrano nel conteggio del "Prossimo passo": diventeranno un binario vero solo quando si aprirà il workforce.</p>
 
+    <div class="model">
+      <h3>Il modello — «da controllo a cura»</h3>
+      <div class="mrow"><span class="mk">Problema</span> — <b>75%</b> del turnover è prevenibile · sostituire una persona costa <b>0,5–2× il salario annuo</b> · <b>42%</b> di chi se ne va poteva essere trattenuto dal manager. In cucina pesa di più: turni spezzati, burnout, lavoro invisibile, carriera ferma.</div>
+      <div class="mrow"><span class="mk">Intuizione</span> — l'app misura <b>già</b> tutto (timbrature, turni, HACCP, formazione): la retention è una <b>lettura diversa</b> di ciò che si misura, <b>nessun dato nuovo da chiedere</b>. Domani l'app restituisce: riconosce, dà voce, fa crescere, protegge dal burnout.</div>
+      <div class="mrow"><span class="mk">Motore di precisione</span> — solo cucina/sala: <b>M1</b> referenti (chef libero) · <b>M2</b> eventi&amp;menu BOH · <b>M3</b> squadra sala FOH. <b>Solver deterministico</b> per numeri e vincoli legali; l'AI fa da <b>voce, non da calcolatrice</b>.</div>
+    </div>
+
     <div class="ethics">
       <h3>Matrice Etica HR</h3>
       <div class="esub">8 principi-vincolo · il gemello etico del Cancello 6 — ogni feature HR li rispetta prima di dirsi pronta.</div>
@@ -943,37 +972,56 @@
 
     <div class="epic">
       <h3>Epica A — Workforce &amp; Compliance <span class="code">pvr* / cmp*</span></h3>
-      <div class="items">
-        <b>W1</b> Motore previsto-vs-reale (tempo/task/HACCP → anomalia → giustificazione → approvazione → registro) ·
-        <b>W2</b> Point-of-work (QR + foto + firma) ·
-        <b>W3</b> Pause &amp; straordinari ·
-        <b>W4</b> Soglie legali L-GAV (alert 80%) ·
-        <b>W5</b> Compliance dashboard + export ispezione ·
-        <b>W6</b> Fascicolo vivo (ACL per ruolo).
+      <div class="order">Motore unico di riconciliazione (atteso vs accaduto) + compliance come stato continuo + enforcement graduato · ordine W1 → W6</div>
+      <div class="wrow"><span class="wcode">W1</span><div class="wbody"><b>Motore Previsto-vs-Reale</b> — il cuore: turno vs timbratura, task&amp;HACCP dovuto vs eseguito → scostamento → anomalia → giustificazione → approvazione chef → registro. <span class="wtag be">backend: registro immutabile</span></div></div>
+      <div class="wrow"><span class="wcode">W2</span><div class="wbody"><b>Point-of-work</b> — QR postazione/frigo apre il controllo giusto; foto+firma obbligatorie sui sensibili (hard: niente prova → non chiudibile). <span class="wtag be">backend: storage cifrato</span></div></div>
+      <div class="wrow"><span class="wcode">W3</span><div class="wbody"><b>Pause &amp; straordinari</b> — pausa obbligatoria registrata + avviso se saltata/corta (L-GAV) + firma; straordinari con alert soglia, blocco/override tracciato e riga payroll.</div></div>
+      <div class="wrow"><span class="wcode">W4</span><div class="wbody"><b>Soglie legali L-GAV</b> — vedere lo sforamento prima: ore sett./annue, straordinari &gt;200h, domeniche minime, scadenze certificati; alert proattivo all'80%. <span class="wtag">nuovo</span></div></div>
+      <div class="wrow"><span class="wcode">W5</span><div class="wbody"><b>Compliance dashboard + export</b> — indice prontezza verde/giallo/rosso sempre visibile, "da sistemare" per i dati mancanti, archivio ispezione in un tap. <span class="wtag be">backend: PDF/Excel server-side</span></div></div>
+      <div class="wrow"><span class="wcode">W6</span><div class="wbody"><b>Fascicolo vivo</b> — profilo collegato a turni/ore/assenze/formazioni/consensi; accesso per ruolo (HR tutto · chef il suo team · operatore i suoi). <span class="wtag be">backend + Cancello 6/RLS</span></div></div>
+      <div class="gap">
+        <div class="has"><b>Già in Staff Meal:</b> login PIN · ruoli · timbrature+pause · checklist HACCP · alert temp/scadenze · approvazione chef · training/contract · lingua operatore · export parziale.</div>
+        <div class="miss"><b>Da costruire (i W):</b> previsto-vs-reale (W1) · QR/foto/firma (W2) · enforcement pause/straordinari (W3) · soglie L-GAV (W4) · compliance dashboard (W5) · fascicolo collegato (W6).</div>
       </div>
-      <div class="gated"><b>Backend-gated:</b> W1 registro immutabile · W2 cifratura · W5 export server-side · W6 retention a norma.</div>
     </div>
 
     <div class="epic">
       <h3>Epica B — Anti-Turnover / Retention <span class="code">rt* / wf*</span></h3>
-      <div class="items">
-        <b>ST.01–04</b> (riconoscimento · total rewards · benessere/anti-burnout · carriera) ·
-        <b>ST.05</b> auto-pianificazione turni ·
-        <b>ST.06–08</b> (onboarding · leadership · prevenzione abbandono) ·
-        <b>ST.09–12</b> (cultura · comunità · autonomia · compensazione).
-      </div>
-      <div class="engine"><b>Motore:</b> M1 referenti → «chef libero» (primo) · M2 BOH · M3 FOH. Solver deterministico; l'AI fa da voce, non da calcolatrice.</div>
+      <div class="order">Ordine: M1 → Fase 1 → Fase 2 → Fase 3 → M2 → M3 (M1 abilita «chef libero» in ST.05)</div>
+      <div class="wrow"><span class="wcode">M1</span><div class="wbody"><b>Referenti → «chef libero»</b> (da fare per primo) — sblocco immediato del referente; training obbligatorio in parallelo (non è un gate), tracciato; piano di successione.</div></div>
+      <div class="wrow"><span class="wcode">M2</span><div class="wbody"><b>Ottimizzatore eventi&amp;menu (BOH)</b> — food cost × costo personale × tempi → composizione squadra; buffer e fasce, non numeri secchi.</div></div>
+      <div class="wrow"><span class="wcode">M3</span><div class="wbody"><b>Squadra sala (FOH)</b> — ospiti × tipo servizio → team + orari sui picchi, allineato al BOH. Stesso solver deterministico.</div></div>
+
+      <div class="week-label">Fase 1 — Quick win (dati già presenti)</div>
+      <div class="wrow"><span class="wcode">ST.01</span><div class="wbody"><b>Riconoscimento &amp; valore</b> — kudos peer post-servizio, badge skill, milestone/anniversari, bacheca.</div></div>
+      <div class="wrow"><span class="wcode">ST.02</span><div class="wbody"><b>Total rewards trasparente</b> — estratto ore/banca ore/straordinari/ferie; stessa trasparenza a lavoratore e HR.</div></div>
+      <div class="wrow"><span class="wcode">ST.03</span><div class="wbody"><b>Benessere &amp; anti-burnout</b> — heat map carico, alert turni consecutivi, check-in umore 1 tap. <span class="wtag">mai numeri/diete</span></div></div>
+      <div class="wrow"><span class="wcode">ST.04</span><div class="wbody"><b>Crescita &amp; carriera</b> — skill matrix per stazione, percorso commis→chef, micro-learning HACCP, mentorship.</div></div>
+
+      <div class="week-label">Fase 2 — Struttura</div>
+      <div class="wrow"><span class="wcode">ST.05</span><div class="wbody"><b>Equità &amp; auto-pianificazione turni</b> — auto-scheduler per livello di autonomia (legge le skill), «chef libero» col referente in turno, minimi L-GAV hard, scambio turni. <span class="wtag">dipende da M1</span></div></div>
+      <div class="wrow"><span class="wcode">ST.06</span><div class="wbody"><b>Onboarding</b> — checklist 90 giorni, buddy dal giorno 1, ruolo/contratto/consenso pronti prima dell'arrivo.</div></div>
+      <div class="wrow"><span class="wcode">ST.07</span><div class="wbody"><b>Leadership</b> — dashboard segnali retention, promemoria 1:1, metriche accountability manager.</div></div>
+      <div class="wrow"><span class="wcode">ST.08</span><div class="wbody"><b>Prevenzione abbandono</b> — flight-risk (indice operativo, mai etichetta clinica), dashboard turnover multi-sede.</div></div>
+
+      <div class="week-label">Fase 3 — Intelligenza</div>
+      <div class="wrow"><span class="wcode">ST.09</span><div class="wbody"><b>Cultura &amp; inclusione</b> — valori nel feed, anti-tossicità, multilingua reale, segnalazioni anonime.</div></div>
+      <div class="wrow"><span class="wcode">ST.10</span><div class="wbody"><b>Comunità</b> — team feed, eventi sociali, profili colleghi, ponte tra sedi.</div></div>
+      <div class="wrow"><span class="wcode">ST.11</span><div class="wbody"><b>Autonomia</b> — auto-gestione disponibilità/preferenze, ownership di partita, canale feedback sicuro.</div></div>
+      <div class="wrow"><span class="wcode">ST.12</span><div class="wbody"><b>Compensazione</b> — estratto total rewards completo; l'app NON calcola la paga, produce l'output per HR/payroll.</div></div>
     </div>
 
     <div class="precond">
       <h3>Precondizioni dure — prima di aprire il binario workforce</h3>
       <ol>
-        <li>Modulo Operatore testabile (6 cancelli).</li>
-        <li>Cancello 6 + RLS/R3 chiusi prima di qualunque dato HR sensibile.</li>
-        <li>Backend reale per i pezzi backend-gated.</li>
+        <li>Modulo Operatore testabile (6 cancelli) — un fronte alla volta.</li>
+        <li>Cancello 6 + RLS/R3 chiusi prima di QUALSIASI dato HR sensibile (W6, flight-risk, mood).</li>
+        <li>Backend reale per i pezzi backend-gated (registro immutabile, cifratura, export, retention).</li>
       </ol>
-      <div class="cand">→ Candidati primi: W1 (date reali già pronte) e M1.</div>
+      <div class="cand">→ Candidati primi: W1 (date reali già pronte) e M1 (referenti).</div>
     </div>
+
+    <div class="manifesto">«La precisione protegge le persone, non le sfrutta.»</div>
   </section>
 
 </main>
