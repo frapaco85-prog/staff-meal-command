@@ -203,6 +203,36 @@
     .stamp{justify-self:start}
     .ticket{padding-left:18px}
   }
+
+  /* ---------- BACKLOG / EPICHE HR (congelato, informativo, FUORI dal flusso) ---------- */
+  .backlog{margin-top:46px;border-top:3px dashed #B9BBB2;padding-top:24px}
+  .backlog .phase-head{border-bottom-color:#9AA6B2}
+  .backlog .phase-head h2{color:#5A6570}
+  .backlog .phase-head .frozen-badge{margin-left:auto}
+  .frozen-badge{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;font-weight:600;background:#EAECEA;color:#6E7A86;display:inline-flex;align-items:center;gap:7px}
+  .frozen-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:#9AA6B2;flex-shrink:0}
+  .backlog .fnote{font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.6;margin:2px 0 18px}
+  .ethics{background:var(--char);color:#F2F3EF;padding:18px 20px;margin-bottom:16px;border-left:5px solid var(--flame)}
+  .ethics h3{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#FF8A4C;margin-bottom:3px}
+  .ethics .esub{font-family:var(--mono);font-size:11px;color:#C8CAC2;margin-bottom:12px;line-height:1.5}
+  .ethics ol{margin:0 0 0 20px;font-size:12.8px;line-height:1.6;color:#E6E7E2}
+  .ethics ol li{margin-bottom:4px}
+  .ethics ol li b{color:#fff;font-weight:600}
+  .ethics .gate7{margin-top:14px;padding-top:12px;border-top:1px solid #3A3B3E;font-size:12.3px;color:#C8CAC2;line-height:1.7}
+  .ethics .gate7 b{color:#FF8A4C;font-weight:600}
+  .epic{background:var(--paper);border:1px solid var(--line);border-left:5px solid #9AA6B2;padding:15px 18px;margin-bottom:14px}
+  .epic h3{font-size:14.5px;font-weight:600;line-height:1.3;margin-bottom:8px}
+  .epic h3 .code{font-family:var(--mono);font-size:11px;color:var(--dim);font-weight:600;margin-left:6px}
+  .epic .items{font-size:12.8px;line-height:1.7;color:var(--ink)}
+  .epic .items b{font-weight:600}
+  .epic .gated{font-family:var(--mono);font-size:11px;color:#7A5A2E;background:#F6EEE4;padding:8px 11px;margin-top:10px;line-height:1.6}
+  .epic .engine{font-size:12.5px;color:var(--dim);margin-top:9px;line-height:1.55}
+  .epic .engine b{color:#4A4C45;font-weight:600}
+  .precond{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--char);padding:15px 18px}
+  .precond h3{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--char);margin-bottom:9px}
+  .precond ol{margin:0 0 0 20px;font-size:12.8px;line-height:1.65}
+  .precond ol li{margin-bottom:3px}
+  .precond .cand{font-size:12.5px;color:var(--flame-deep);margin-top:10px;font-weight:600}
 </style>
 </head>
 <body>
@@ -885,6 +915,65 @@
         <tr><td>Dato oro</td><td>Sorgente/tono che converte per segmento</td><td class="thr">dashboard src × ruolo</td><td>Continuo</td></tr>
       </tbody>
     </table>
+  </section>
+
+  <!-- ============ BACKLOG / EPICHE FUTURE HR (congelato, informativo, FUORI dal flusso) ============ -->
+  <section class="backlog" id="backlogHR" aria-label="Backlog epiche future HR — congelato">
+    <div class="phase-head">
+      <h2>Backlog / Epiche future HR</h2>
+      <span class="frozen-badge">Congelato · binario workforce non attivo</span>
+    </div>
+    <p class="fnote">Riquadro informativo, separato dal flusso a due binari. Queste voci NON sono passi spuntabili e NON entrano nel conteggio del "Prossimo passo": diventeranno un binario vero solo quando si aprirà il workforce.</p>
+
+    <div class="ethics">
+      <h3>Matrice Etica HR</h3>
+      <div class="esub">8 principi-vincolo · il gemello etico del Cancello 6 — ogni feature HR li rispetta prima di dirsi pronta.</div>
+      <ol>
+        <li><b>Da controllo a CURA</b> — segnali per aiutare, mai per punire/sorvegliare.</li>
+        <li><b>L'AI suggerisce, l'umano decide</b> — vincoli legali mai a un LLM (solver deterministico).</li>
+        <li><b>Trasparenza verso la persona</b> — vede i propri dati.</li>
+        <li><b>Enforcement graduato, mai muri ciechi</b> — soft/hard + override tracciato.</li>
+        <li><b>Dignità e non-danno</b> — straordinari sempre registrati e pagati; riposo anche per chi comanda.</li>
+        <li><b>Minimi legali come pavimento e oltre</b> — L-GAV hard.</li>
+        <li><b>Minimizzazione + consenso (nFADP)</b> — niente sensibile in chiaro; segnalazioni anonime.</li>
+        <li><b>Inclusione radicale</b> — tutte le lingue, azione &lt;3s.</li>
+      </ol>
+      <div class="gate7"><b>Gate a 7 punti</b> (ogni feature HR lo passa prima di dirsi pronta): cura non controllo? · la persona vede il dato? · override umano tracciato? · indice non etichetta? · minimi legali hard via solver deterministico? · dati minimizzati + consenso? · comprensibile &lt;3s?</div>
+    </div>
+
+    <div class="epic">
+      <h3>Epica A — Workforce &amp; Compliance <span class="code">pvr* / cmp*</span></h3>
+      <div class="items">
+        <b>W1</b> Motore previsto-vs-reale (tempo/task/HACCP → anomalia → giustificazione → approvazione → registro) ·
+        <b>W2</b> Point-of-work (QR + foto + firma) ·
+        <b>W3</b> Pause &amp; straordinari ·
+        <b>W4</b> Soglie legali L-GAV (alert 80%) ·
+        <b>W5</b> Compliance dashboard + export ispezione ·
+        <b>W6</b> Fascicolo vivo (ACL per ruolo).
+      </div>
+      <div class="gated"><b>Backend-gated:</b> W1 registro immutabile · W2 cifratura · W5 export server-side · W6 retention a norma.</div>
+    </div>
+
+    <div class="epic">
+      <h3>Epica B — Anti-Turnover / Retention <span class="code">rt* / wf*</span></h3>
+      <div class="items">
+        <b>ST.01–04</b> (riconoscimento · total rewards · benessere/anti-burnout · carriera) ·
+        <b>ST.05</b> auto-pianificazione turni ·
+        <b>ST.06–08</b> (onboarding · leadership · prevenzione abbandono) ·
+        <b>ST.09–12</b> (cultura · comunità · autonomia · compensazione).
+      </div>
+      <div class="engine"><b>Motore:</b> M1 referenti → «chef libero» (primo) · M2 BOH · M3 FOH. Solver deterministico; l'AI fa da voce, non da calcolatrice.</div>
+    </div>
+
+    <div class="precond">
+      <h3>Precondizioni dure — prima di aprire il binario workforce</h3>
+      <ol>
+        <li>Modulo Operatore testabile (6 cancelli).</li>
+        <li>Cancello 6 + RLS/R3 chiusi prima di qualunque dato HR sensibile.</li>
+        <li>Backend reale per i pezzi backend-gated.</li>
+      </ol>
+      <div class="cand">→ Candidati primi: W1 (date reali già pronte) e M1.</div>
+    </div>
   </section>
 
 </main>
