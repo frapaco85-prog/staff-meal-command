@@ -3,8 +3,8 @@
     "product": "Staff Meal",
     "state_version": "2026.07.10.1",
     "updated": "2026-07-10",
-    "code_anchor": "12c7f25c8aec4245e2388c545e14620984f29a5e",
-    "note": "Stato reale del prodotto, sola lettura. Deve essere auto-commit dal Codice (mai a mano). Zero dati persi. Nessun segreto (chiavi/PIN) in questo file. I moduli marcati notif riflettono lo snapshot all'ancora 12c7f25: il sistema notifiche è in rework da un'altra sessione, riverificare prima di darli per definitivi.",
+    "code_anchor": "0fb43ed2caed67d4bbb83066fa86f868549d616c",
+    "note": "Stato reale del prodotto, sola lettura. Deve essere auto-commit dal Codice (mai a mano). Zero dati persi. Nessun segreto (chiavi/PIN) nel file. code_anchor = ultimo commit di CODICE del prodotto (0fb43ed). Il grosso dei moduli è stato derivato a state_derived_anchor (12c7f25): i moduli con notif:true (sistema notifiche, in rework da un'altra sessione) possono essere avanzati rispetto a questo commit — riverificarli nella sessione che continua.",
     "read_only": true,
     "sectors_planned": [
       {
@@ -51,9 +51,10 @@
         "mapped": true
       }
     ],
-    "updated_at": "2026-07-10T00:00:00Z",
+    "updated_at": "2026-07-10T09:00:00Z",
     "derived_from": "CLAUDE.md (staff-meal) + documenti piano ~/Desktop/StaffMeal + modello HACCP",
-    "generated_by": "Code"
+    "generated_by": "Code",
+    "state_derived_anchor": "12c7f25c8aec4245e2388c545e14620984f29a5e"
   },
   "sectors": [
     {
