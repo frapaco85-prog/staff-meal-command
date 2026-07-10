@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Meal — Cruscotto vivo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#EDF0F2; --panel:#FFFFFF; --ink:#16232E; --ink-soft:#4A5B67; --ink-faint:#8A98A2;
+  --line:#DCE2E6; --line-soft:#E9EDEF;
+  --teal:#0C6E6E; --teal-d:#095656; --blue:#1565C0;
+  --built:#1F9D57; --built-bg:#E7F6EE;
+  --partial:#D9891A; --partial-bg:#FBF1E0;
+  --todo:#94A3AD; --todo-bg:#EEF1F3;
+  --red:#C4362F; --red-bg:#FBECEA;
+  --mono:'IBM Plex Mono',monospace; --disp:'Space Grotesk',sans-serif; --body:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+header.top{background:linear-gradient(135deg,#0E2A2A 0%,#123A3A 55%,#0C4A63 100%);color:#fff;padding:38px 0 30px;position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 78px,rgba(255,255,255,.03) 78px 79px);pointer-events:none}
+.top .wrap{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap}
+.brand-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#7FD4D0;margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:700;font-size:34px;line-height:1.05;letter-spacing:-.01em;max-width:640px}
+.sub{color:#B9D4D2;margin-top:12px;max-width:600px;font-size:14.5px}
+.sources{margin-top:16px;font-family:var(--mono);font-size:10.5px;color:#6FA8A8;letter-spacing:.02em}
+.ring-box{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:150px}
+.ring{position:relative;width:132px;height:132px}
+.ring svg{transform:rotate(-90deg)}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:var(--disp);font-weight:700;font-size:30px;color:#fff;line-height:1}
+.ring-cap{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#8FC9C7;margin-top:3px}
+.ring-hint{font-family:var(--mono);font-size:10px;color:#7FB6B4;text-align:center}
+main{padding:34px 0 60px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.sec-h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.01em;margin-bottom:4px}
+.sec-sub{color:var(--ink-soft);max-width:640px;margin-bottom:22px;font-size:13.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{display:block;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;transition:.15s;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent,var(--teal))}
+.card:hover{border-color:var(--teal);box-shadow:0 8px 26px rgba(12,74,99,.10);transform:translateY(-2px)}
+.card.soon{opacity:.72;cursor:default}
+.card.soon:hover{transform:none;box-shadow:none;border-color:var(--line)}
+.card-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.card-name{font-family:var(--disp);font-weight:600;font-size:17px}
+.card-pill{margin-left:auto;font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600;white-space:nowrap}
+.pill-built{background:var(--built-bg);color:#166B3C}
+.pill-partial{background:var(--partial-bg);color:#8a5a00}
+.pill-todo{background:var(--todo-bg);color:#5A6B75}
+.card-desc{color:var(--ink-soft);font-size:12.5px;min-height:34px;margin-bottom:12px}
+.bar-track{height:8px;border-radius:6px;background:var(--line-soft);overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--teal),var(--blue))}
+.card-meta{display:flex;align-items:center;gap:10px;margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+.card-meta .pct{color:var(--ink);font-weight:600}
+.dotset{display:inline-flex;gap:3px;margin-left:auto}
+.dotset i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.d-built{background:var(--built)}.d-partial{background:var(--partial)}.d-todo{background:var(--todo)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px;font-size:12px;color:var(--ink-soft)}
+.legend b{color:var(--ink)}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
+footer{border-top:1px solid var(--line);padding:20px 0;text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+.err{background:var(--red-bg);border:1px solid #efc9c5;color:#7a1f1a;padding:14px 16px;border-radius:12px;font-size:13px}
+code{font-family:var(--mono);font-size:.92em;background:#0000000d;padding:1px 5px;border-radius:5px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div>
+      <div class="brand-eyebrow">Staff Meal · Cruscotto vivo</div>
+      <h1>Il prodotto, settore per settore</h1>
+      <div class="sub">Una mappa viva dello stato reale di ogni area: cosa è costruito, cosa è parziale, cosa manca. I dati vengono da <code style="background:#ffffff18;color:#cfeceb">project_state.json</code>, ancorato all'ultimo commit del Codice. Sola lettura.</div>
+      <div class="sources" id="pgAnchor"></div>
+    </div>
+    <div class="ring-box">
+      <div class="ring">
+        <svg width="132" height="132" viewBox="0 0 132 132">
+          <circle cx="66" cy="66" r="58" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="11"/>
+          <circle id="ringProg" cx="66" cy="66" r="58" fill="none" stroke="#7FD4D0" stroke-width="11" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+        </svg>
+        <div class="ring-label"><div class="ring-pct" id="ringPct">–</div><div class="ring-cap">Costruito</div></div>
+      </div>
+      <div class="ring-hint" id="ringHint">caricamento…</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="eyebrow">I settori</div>
+    <h2 class="sec-h2">Scegli un'area</h2>
+    <p class="sec-sub">Ogni card apre la mappa del settore: fasi, moduli con struttura A–J, cancelli di rilascio e cose in sospeso.</p>
+    <div class="grid" id="grid"></div>
+    <div class="legend">
+      <span><i class="d-built"></i><b>Costruito</b></span>
+      <span><i class="d-partial"></i><b>Parziale</b></span>
+      <span><i class="d-todo"></i><b>Da fare</b></span>
+      <span style="color:var(--ink-faint)">Le percentuali contano i moduli <b>costruiti</b> sul totale del settore.</span>
+    </div>
+  </div>
+</main>
+
+<footer id="pgFooter">Staff Meal · Cruscotto vivo · dati da project_state.json (auto-commit dal Codice) · sola lettura, nessun segreto</footer>
+
+<script>
+const STPILL={built:['pill-built','Costruito'],partial:['pill-partial','Parziale'],todo:['pill-todo','Da fare']};
+const PHCOL=['#0C6E6E','#1565C0','#6A4BA8','#A83B6B','#B5561E','#4A5A66'];
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function sectorStats(sec){
+  const mods=(sec&&sec.modules)||[];
+  const total=mods.length;
+  const by={built:0,partial:0,todo:0};
+  mods.forEach(m=>{ if(by[m.status]!=null) by[m.status]++; });
+  const done=mods.filter(m=>m.done===true).length;
+  const pct= total? Math.round(100*done/total) : 0;
+  // stato complessivo del settore
+  let status='todo';
+  if(total>0){ if(by.built===total) status='built'; else if(by.built>0||by.partial>0) status='partial'; }
+  return {total,by,done,pct,status};
+}
+
+function card(sec, planned){
+  if(!sec){ // settore pianificato ma non ancora mappato
+    return '<div class="card soon" style="--accent:#94A3AD">'+
+      '<div class="card-top"><span class="card-name">'+esc(planned.name)+'</span>'+
+      '<span class="card-pill pill-todo">In preparazione</span></div>'+
+      '<div class="card-desc">Settore pianificato, mappa non ancora costruita.</div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>'+
+      '<div class="card-meta"><span class="pct">0%</span> · 0 moduli</div></div>';
+  }
+  const st=sectorStats(sec);
+  const acc=PHCOL[0];
+  const pill=STPILL[st.status];
+  const desc=(sec.sub||'').split('.')[0]+'.';
+  return '<a class="card" href="mappa.html?s='+encodeURIComponent(sec.key)+'" style="--accent:'+acc+'">'+
+    '<div class="card-top"><span class="card-name">'+esc(sec.name)+'</span>'+
+    '<span class="card-pill '+pill[0]+'">'+pill[1]+'</span></div>'+
+    '<div class="card-desc">'+esc(desc)+'</div>'+
+    '<div class="bar-track"><div class="bar-fill" style="width:'+st.pct+'%"></div></div>'+
+    '<div class="card-meta"><span class="pct">'+st.pct+'%</span> · '+st.done+'/'+st.total+' costruiti · '+((sec.phases||[]).length)+' fasi'+
+    '<span class="dotset" title="'+st.by.built+' costruiti · '+st.by.partial+' parziali · '+st.by.todo+' da fare">'+
+      (st.by.built?'<i class="d-built"></i>':'')+(st.by.partial?'<i class="d-partial"></i>':'')+(st.by.todo?'<i class="d-todo"></i>':'')+
+    '</span></div></a>';
+}
+
+fetch('project_state.json',{cache:'no-store'})
+  .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(d=>{
+    const meta=d.meta||{}, sectors=d.sectors||[];
+    const byKey={}; sectors.forEach(s=>byKey[s.key]=s);
+    const planned=(meta.sectors_planned&&meta.sectors_planned.length)?meta.sectors_planned:sectors.map(s=>({key:s.key,name:s.name}));
+    // ancora
+    const anchor=meta.code_anchor?String(meta.code_anchor).slice(0,7):'—';
+    document.getElementById('pgAnchor').innerHTML='ANCORA CODICE '+anchor+(meta.state_version?(' · STATO '+esc(meta.state_version)):'')+(meta.updated?(' · '+esc(meta.updated)):'')+' · SOLA LETTURA';
+    // griglia
+    document.getElementById('grid').innerHTML=planned.map(p=>card(byKey[p.key],p)).join('');
+    // anello globale
+    let dg=0,tg=0; sectors.forEach(s=>{const st=sectorStats(s); dg+=st.done; tg+=st.total;});
+    const pct=tg?Math.round(100*dg/tg):0;
+    document.getElementById('ringPct').textContent=pct+'%';
+    document.getElementById('ringHint').textContent=dg+' / '+tg+' moduli · '+sectors.length+'/'+planned.length+' settori mappati';
+    document.getElementById('ringProg').style.strokeDashoffset=364.4*(1-(tg?dg/tg:0));
+    document.title='Staff Meal · Cruscotto vivo';
+  })
+  .catch(err=>{
+    document.getElementById('grid').innerHTML='<div class="err">Impossibile caricare <b>project_state.json</b>: '+esc(err.message)+'. Aprendo il file con doppio clic (file://) il browser blocca il fetch — serve un piccolo server locale (es. <code>python3 -m http.server</code>). Online funziona senza altro.</div>';
+    document.getElementById('ringHint').textContent='errore';
+  });
+</script>
+</body>
+</html>

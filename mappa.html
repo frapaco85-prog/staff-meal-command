@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Meal — Mappa settore Operatore</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#EDF0F2; --panel:#FFFFFF; --ink:#16232E; --ink-soft:#4A5B67; --ink-faint:#8A98A2;
+  --line:#DCE2E6; --line-soft:#E9EDEF;
+  --teal:#0C6E6E; --teal-d:#095656; --blue:#1565C0;
+  --built:#1F9D57; --built-bg:#E7F6EE;
+  --partial:#D9891A; --partial-bg:#FBF1E0;
+  --todo:#94A3AD; --todo-bg:#EEF1F3;
+  --red:#C4362F; --red-bg:#FBECEA;
+  --mono:'IBM Plex Mono',monospace; --disp:'Space Grotesk',sans-serif; --body:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+/* ---------- HEADER ---------- */
+header.top{background:linear-gradient(135deg,#0E2A2A 0%,#123A3A 55%,#0C4A63 100%);color:#fff;padding:38px 0 30px;position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,transparent 0 78px,rgba(255,255,255,.03) 78px 79px);pointer-events:none}
+.top .wrap{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap}
+.brand-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#7FD4D0;margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:700;font-size:34px;line-height:1.05;letter-spacing:-.01em;max-width:640px}
+.sub{color:#B9D4D2;margin-top:12px;max-width:560px;font-size:14.5px}
+.sources{margin-top:16px;font-family:var(--mono);font-size:10.5px;color:#6FA8A8;letter-spacing:.02em}
+
+/* progress ring */
+.ring-box{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:150px}
+.ring{position:relative;width:132px;height:132px}
+.ring svg{transform:rotate(-90deg)}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:var(--disp);font-weight:700;font-size:30px;color:#fff;line-height:1}
+.ring-cap{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#8FC9C7;margin-top:3px}
+.ring-hint{font-family:var(--mono);font-size:10px;color:#7FB6B4;text-align:center}
+
+/* ---------- STICKY BAR ---------- */
+.bar{position:sticky;top:0;z-index:40;background:rgba(237,240,242,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:11px 0}
+.bar .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;padding:6px 12px;border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--ink-soft);cursor:pointer;transition:.15s;white-space:nowrap;font-weight:500}
+.chip:hover{border-color:var(--teal);color:var(--teal)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.st-built.on{background:var(--built);border-color:var(--built)}
+.chip.st-partial.on{background:var(--partial);border-color:var(--partial)}
+.chip.st-todo.on{background:var(--todo);border-color:var(--todo)}
+.search{flex:1;min-width:150px;display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:6px 13px}
+.search input{border:none;outline:none;background:none;font-family:var(--body);font-size:13px;width:100%;color:var(--ink)}
+.search svg{flex-shrink:0;opacity:.5}
+.bar-actions{display:flex;gap:6px}
+.bar-btn{font-family:var(--mono);font-size:10.5px;padding:6px 11px;border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--ink-soft);cursor:pointer;font-weight:500}
+.bar-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ---------- INTRO / EVAL ---------- */
+.intro{padding:34px 0 8px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);font-weight:500;margin-bottom:10px}
+.intro h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.01em;margin-bottom:14px}
+.eval-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+@media(max-width:760px){.eval-grid{grid-template-columns:1fr}}
+.eval-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.eval-card h3{font-family:var(--disp);font-weight:600;font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.eval-card p{color:var(--ink-soft);font-size:13.3px;margin-bottom:8px}
+.eval-card p:last-child{margin-bottom:0}
+.eval-card .tag{font-family:var(--mono);font-size:9.5px;padding:2px 8px;border-radius:5px;font-weight:500}
+.note-box{background:var(--partial-bg);border:1px solid #F0DCB8;border-radius:12px;padding:16px 20px;margin-top:14px}
+.note-box h3{font-family:var(--disp);font-weight:600;font-size:14.5px;color:#8A5A10;margin-bottom:6px}
+.note-box p{color:#6E5011;font-size:13.2px}
+
+/* legend */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;padding:14px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft)}
+.dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.dot.built{background:var(--built)} .dot.partial{background:var(--partial)} .dot.todo{background:var(--todo)}
+
+/* ---------- PHASES ---------- */
+.phases{padding:26px 0 10px}
+.phase{margin-bottom:14px;position:relative}
+.phase-head{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--panel);border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:.15s}
+.phase-head:hover{border-color:var(--phc,#0C6E6E)}
+.phase.open .phase-head{border-radius:12px 12px 0 0;border-bottom-color:transparent}
+.phase-num{font-family:var(--disp);font-weight:700;font-size:26px;width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;background:var(--phc,#0C6E6E)}
+.phase-info{flex:1;min-width:0}
+.phase-name{font-family:var(--disp);font-weight:600;font-size:18px;letter-spacing:-.01em}
+.phase-sub{color:var(--ink-faint);font-size:12.5px;margin-top:1px}
+.phase-meta{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.phase-bar{width:96px;height:7px;border-radius:4px;background:var(--line-soft);overflow:hidden}
+.phase-bar span{display:block;height:100%;background:var(--phc,#0C6E6E);transition:width .4s}
+.phase-count{font-family:var(--mono);font-size:11px;color:var(--ink-faint);min-width:38px;text-align:right}
+.phase-arrow{transition:transform .2s;color:var(--ink-faint)}
+.phase.open .phase-arrow{transform:rotate(90deg)}
+.phase-body{display:none;border:1px solid var(--line);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;background:var(--panel)}
+.phase.open .phase-body{display:block}
+
+/* module row */
+.mod{border-top:1px solid var(--line-soft)}
+.mod-head{display:flex;align-items:center;gap:13px;padding:13px 20px;cursor:pointer;transition:.12s}
+.mod-head:hover{background:#F7FAFB}
+.mod-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;position:relative}
+.mod-check{width:20px;height:20px;border:1.6px solid var(--line);border-radius:6px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;background:#fff}
+.mod-check:hover{border-color:var(--built)}
+.mod-check.done{background:var(--built);border-color:var(--built)}
+.mod-name{font-weight:600;font-size:14.5px;flex:1;min-width:0}
+.mod-name .code{font-family:var(--mono);font-size:10px;color:var(--ink-faint);font-weight:400;margin-left:7px}
+.mod-sez{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);white-space:nowrap}
+.mod-badges{display:flex;gap:5px;align-items:center;flex-shrink:0}
+.badge{font-family:var(--mono);font-size:9px;padding:2.5px 8px;border-radius:5px;font-weight:500;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+.badge.built{background:var(--built-bg);color:#166B3C}
+.badge.partial{background:var(--partial-bg);color:#8A5A10}
+.badge.todo{background:var(--todo-bg);color:#5C6A73}
+.badge.mvp{background:#EAE4F6;color:#5B3EA0}
+.mod-arrow{color:var(--ink-faint);transition:transform .2s;flex-shrink:0}
+.mod.open .mod-arrow{transform:rotate(90deg)}
+
+/* module detail */
+.mod-detail{display:none;padding:4px 20px 22px 46px;background:#FAFCFC;border-top:1px solid var(--line-soft)}
+.mod.open .mod-detail{display:block}
+.sm-status{background:#fff;border-left:3px solid var(--phc,#0C6E6E);border-radius:0 8px 8px 0;padding:11px 15px;margin:14px 0 16px;font-size:13px;color:var(--ink-soft)}
+.sm-status b{color:var(--ink);font-weight:600}
+.aj-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 22px}
+@media(max-width:720px){.aj-grid{grid-template-columns:1fr}}
+.aj{padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.aj-k{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:500;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.aj-k .ltr{background:var(--teal);color:#fff;width:15px;height:15px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.aj-v{font-size:13px;color:var(--ink);line-height:1.5}
+.aj-v.mono{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);line-height:1.5}
+.aj.full{grid-column:1/-1}
+.chiprow{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
+.minichip{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;background:#EEF3F3;color:var(--teal-d);border:1px solid #DCE8E8}
+.minichip.doc{background:#F0EEF6;color:#5B3EA0;border-color:#E0DAF0}
+.minichip.tbl{background:#E9F3EC;color:#1B6B3F;border-color:#D3E8DA}
+
+/* ---------- REFERENCE ---------- */
+.ref{padding:36px 0}
+.ref h2{font-family:var(--disp);font-weight:600;font-size:23px;margin-bottom:6px;letter-spacing:-.01em}
+.ref-sub{color:var(--ink-faint);font-size:13px;margin-bottom:20px}
+.ref-block{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden}
+.ref-block-head{padding:15px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ref-block-head:hover{background:#F7FAFB}
+.ref-block-title{font-family:var(--disp);font-weight:600;font-size:15.5px;display:flex;align-items:center;gap:10px}
+.ref-block-title .n{font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-weight:400}
+.ref-block-body{display:none;padding:2px 20px 18px;border-top:1px solid var(--line-soft)}
+.ref-block.open .ref-block-body{display:block}
+.ref-block.open .ref-block-head{background:#F7FAFB}
+.ref-arrow{color:var(--ink-faint);transition:transform .2s}
+.ref-block.open .ref-arrow{transform:rotate(90deg)}
+
+table.grid{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+table.grid th{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);text-align:left;padding:7px 10px;border-bottom:1.5px solid var(--line);font-weight:500}
+table.grid td{padding:8px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--ink-soft)}
+table.grid td:first-child{color:var(--ink);font-weight:500}
+table.grid tr:hover td{background:#F7FAFB}
+.code-cell{font-family:var(--mono);font-size:11px}
+.st-pill{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:5px;font-weight:500;text-transform:uppercase;white-space:nowrap}
+.st-pill.built{background:var(--built-bg);color:#166B3C}
+.st-pill.partial{background:var(--partial-bg);color:#8A5A10}
+.st-pill.todo{background:var(--todo-bg);color:#5C6A73}
+
+/* semaforo */
+.sem-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.sem-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:2px}
+.sem-dot.verde{background:#2E9E52} .sem-dot.giallo{background:#E0A81E} .sem-dot.rosso{background:#C4362F} .sem-dot.nero{background:#2B2B2B}
+.sem-txt b{font-size:13.5px} .sem-txt .m{color:var(--ink-soft);font-size:12.5px} .sem-txt .a{font-size:12px;color:var(--ink-faint);font-family:var(--mono);margin-top:2px}
+
+/* mvp */
+.mvp-list{counter-reset:mvp;margin-top:10px}
+.mvp-item{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid var(--line-soft);counter-increment:mvp}
+.mvp-item::before{content:counter(mvp);font-family:var(--disp);font-weight:700;font-size:14px;color:#fff;background:var(--teal);width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mvp-item span{font-size:13.5px}
+
+/* master prompt */
+.mp{background:#0F2A2A;color:#CFE8E6;border-radius:12px;padding:20px 22px;margin-top:10px;font-family:var(--mono);font-size:11.5px;line-height:1.65}
+.mp b{color:#7FD4D0;font-weight:500}
+
+footer{padding:30px 0 50px;text-align:center;color:var(--ink-faint);font-family:var(--mono);font-size:10.5px}
+.hidden{display:none!important}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;z-index:100;opacity:0;transition:.25s;pointer-events:none}
+.toast.show{opacity:1}
+.no-match{padding:40px;text-align:center;color:var(--ink-faint);font-size:14px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div>
+      <div class="brand-eyebrow" id="pgEyebrow">Staff Meal · Cruscotto vivo</div>
+      <h1 id="pgTitle">Mappa settore</h1>
+      <div class="sub" id="pgSub">Caricamento stato…</div>
+      <div class="sources" id="pgSources"></div>
+    </div>
+    <div class="ring-box">
+      <div class="ring">
+        <svg width="132" height="132" viewBox="0 0 132 132">
+          <circle cx="66" cy="66" r="58" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="11"/>
+          <circle id="ringProg" cx="66" cy="66" r="58" fill="none" stroke="#7FD4D0" stroke-width="11" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+        </svg>
+        <div class="ring-label"><div class="ring-pct" id="ringPct">0%</div><div class="ring-cap">Completato</div></div>
+      </div>
+      <div class="ring-hint" id="ringHint">0 / 34 moduli</div>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="chips" id="phaseChips"></div>
+    <div class="chips" id="statusChips"></div>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="searchInput" placeholder="Cerca modulo, documento, tabella…">
+    </div>
+    <div class="bar-actions">
+      <span class="bar-btn" id="pgAnchor" style="cursor:default;opacity:.85">Sola lettura</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- INTRO -->
+  <section class="intro" id="introSection">
+    <div class="eyebrow">Cruscotto vivo · sola lettura</div>
+    <h2>Lo stato reale del settore</h2>
+    <div class="note-box" id="introBody"></div>
+    <div class="legend">
+      <div class="legend-item"><span class="dot built"></span> <b>Costruito</b> — già presente e funzionante nel prodotto</div>
+      <div class="legend-item"><span class="dot partial"></span> <b>Parziale</b> — fondamenta presenti, da completare</div>
+      <div class="legend-item"><span class="dot todo"></span> <b>Da fare</b> — modulo non ancora costruito</div>
+    </div>
+  </section>
+
+  <!-- PHASES -->
+  <section class="phases">
+    <div class="eyebrow">La griglia per fasi</div>
+    <h2 id="phaseCount" style="font-family:var(--disp);font-weight:600;font-size:23px;margin-bottom:4px;letter-spacing:-.01em">…</h2>
+    <p class="ref-sub">Ogni modulo si apre con la struttura A–J: obiettivo, rischio prevenuto, tabelle/dati, flusso operatore, flusso responsabile, limiti/alert, azioni correttive, PDF/report, formazione, archiviazione — più ruoli e stato reale in Staff Meal.</p>
+    <div id="phasesContainer"></div>
+    <div class="no-match hidden" id="noMatch">Nessun modulo corrisponde ai filtri.</div>
+  </section>
+
+  <!-- REFERENCE -->
+  <section class="ref">
+    <div class="eyebrow">Pannelli di riferimento</div>
+    <h2>Cancelli di rilascio &amp; sospesi</h2>
+    <p class="ref-sub">La Definition of Done (i 6 cancelli), le cose ancora in sospeso e la legenda per leggere la mappa.</p>
+    <div id="refContainer"></div>
+  </section>
+</div>
+
+<footer id="pgFooter">Staff Meal · Cruscotto vivo · mappa di settore · dati da project_state.json (auto-commit dal Codice) · sola lettura, nessun segreto</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// STAFF MEAL — CRUSCOTTO VIVO · MAPPA SETTORE (sola lettura)
+// I dati arrivano da project_state.json (versionato, auto-commit dal Codice).
+// Questo file NON scrive stato: i check sono INDICATORI, non interruttori.
+// ═══════════════════════════════════════════════════════════════════════════
+const SECTOR_KEY = (()=>{ try{ return new URLSearchParams(location.search).get('s') || 'operatore'; }catch(e){ return 'operatore'; } })();
+
+// Popolati da project_state.json al caricamento (vedi boot in fondo).
+let META = {}, SECTOR = {};
+let PHASES = [], MODULES = [];
+let STATE_LEVELS = [], SEMAFORO = [], DOCS = [], TABLES = [], COMMON_FIELDS = [], RISKS = [], MVP = [];
+
+function applyState(data){
+  META   = data.meta || {};
+  SECTOR = (data.sectors || []).find(s => s.key === SECTOR_KEY) || {};
+  PHASES        = SECTOR.phases  || [];
+  MODULES       = SECTOR.modules || [];
+  const ref     = SECTOR.ref || {};
+  STATE_LEVELS  = ref.stateLevels || [];
+  SEMAFORO      = ref.semaforo     || [];
+  DOCS          = ref.docs         || [];
+  TABLES        = ref.tables       || [];
+  COMMON_FIELDS = ref.commonFields || [];
+  RISKS         = ref.risks        || [];
+  MVP           = ref.mvp          || [];
+}
+</script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// STATE + PERSISTENCE
+// ═══════════════════════════════════════════════════════════════════════════
+const SKEY='staffmeal_cruscotto_'+SECTOR_KEY+'_v1'; // solo preferenze filtro/vista, MAI lo stato
+let filterPhase='all'; let filterStatus='all'; let query='';
+try{const s=JSON.parse(localStorage.getItem(SKEY)||'{}');filterPhase=s.filterPhase??'all';filterStatus=s.filterStatus??'all';}catch(e){}
+function save(){try{localStorage.setItem(SKEY,JSON.stringify({filterPhase,filterStatus}));}catch(e){}}
+// Sola lettura: "done" è un indicatore che arriva dal JSON, non un interruttore.
+function isDone(m){return !!(m&&m.done===true);}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2000);}
+
+const STMAP={built:'Già costruito',partial:'Parziale',todo:'Da costruire'};
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FILTER CHIPS
+// ═══════════════════════════════════════════════════════════════════════════
+function buildChips(){
+  const pc=document.getElementById('phaseChips');
+  let h='<div class="chip'+(filterPhase==='all'?' on':'')+'" data-ph="all">Tutte le fasi</div>';
+  PHASES.forEach(p=>{h+='<div class="chip'+(filterPhase==p.n?' on':'')+'" data-ph="'+p.n+'">Fase '+p.n+'</div>';});
+  pc.innerHTML=h;
+  pc.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{filterPhase=c.dataset.ph==='all'?'all':parseInt(c.dataset.ph);save();buildChips();render();});
+
+  const sc=document.getElementById('statusChips');
+  const sts=[['all','Tutti',''],['built','Costruiti','st-built'],['partial','Parziali','st-partial'],['todo','Da fare','st-todo']];
+  sc.innerHTML=sts.map(s=>'<div class="chip '+s[2]+(filterStatus===s[0]?' on':'')+'" data-st="'+s[0]+'">'+s[1]+'</div>').join('');
+  sc.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{filterStatus=c.dataset.st;save();buildChips();render();});
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════════════════════════════════════════
+function updateProgress(){
+  const total=MODULES.length||1;
+  const n=MODULES.filter(isDone).length;
+  const pct=Math.round(100*n/total);
+  document.getElementById('ringPct').textContent=pct+'%';
+  document.getElementById('ringHint').textContent=n+' / '+MODULES.length+' moduli costruiti';
+  const circ=364.4;
+  document.getElementById('ringProg').style.strokeDashoffset=circ*(1-n/total);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MODULE MATCH (filters + search)
+// ═══════════════════════════════════════════════════════════════════════════
+function matchMod(m){
+  if(filterPhase!=='all'&&m.ph!==filterPhase)return false;
+  if(filterStatus!=='all'&&m.status!==filterStatus)return false;
+  if(query){
+    const q=query.toLowerCase();
+    const hay=(m.nome+' '+m.sez+' '+m.A+' '+m.B+' '+m.smNote+' '+m.ruoli+' '+m.docs+' '+(m.C||[]).join(' ')+' '+m.fields).toLowerCase();
+    if(!hay.includes(q))return false;
+  }
+  return true;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RENDER PHASES + MODULES
+// ═══════════════════════════════════════════════════════════════════════════
+function ajRow(letter,label,val,mono){
+  if(!val||val==='—')return '';
+  return '<div class="aj"><div class="aj-k"><span class="ltr">'+letter+'</span>'+label+'</div><div class="aj-v'+(mono?' mono':'')+'">'+val+'</div></div>';
+}
+
+function modDetail(m){
+  let tbls=(m.C||[]).filter(x=>x&&x!=='—').map(t=>'<span class="minichip tbl">'+esc(t)+'</span>').join('');
+  let docs=(m.docs&&m.docs!=='—')?m.docs.split(',').map(d=>'<span class="minichip doc">doc '+d.trim()+'</span>').join(''):'';
+  let states=(m.states&&m.states!=='—')?'<span class="minichip">'+esc(m.states)+'</span>':'';
+
+  let aj='';
+  aj+=ajRow('A','Obiettivo',esc(m.A));
+  aj+=ajRow('B','Rischio prevenuto',esc(m.B));
+  aj+=ajRow('C','Tabelle database',tbls?'<div class="chiprow">'+tbls+'</div>':'—');
+  aj+=ajRow('C','Campi',esc(m.fields),true);
+  aj+=ajRow('D','Flusso operatore',esc(m.D));
+  aj+=ajRow('E','Flusso responsabile',esc(m.E));
+  aj+=ajRow('F','Limiti / alert',esc(m.F));
+  aj+=ajRow('G','Azioni correttive',esc(m.G));
+  aj+=ajRow('H','PDF / report',esc(m.H));
+  aj+=ajRow('I','Formazione',esc(m.I));
+  aj+=ajRow('J','Archiviazione',esc(m.J));
+
+  let meta='<div class="aj full"><div class="aj-k">Documenti · Ruoli · Stati</div><div class="chiprow">'+
+    docs+states+'<span class="minichip">'+esc(m.ruoli)+'</span></div></div>';
+
+  return '<div class="mod-detail">'+
+    '<div class="sm-status"><b>Stato in Staff Meal:</b> '+esc(m.smNote)+'</div>'+
+    '<div class="aj-grid">'+aj+meta+'</div>'+
+    '</div>';
+}
+
+function modRow(m){
+  const d=isDone(m);
+  const flags=(m.conf==='deduced'?'<span class="badge" style="background:#fde7cf;color:#8a5a00">stato dedotto</span>':'')+
+              (m.notif===true?'<span class="badge" style="background:#ece4fb;color:#5b3fa8">notifiche · altra chat</span>':'');
+  return '<div class="mod" data-mid="'+m.id+'">'+
+    '<div class="mod-head">'+
+      '<div class="mod-check'+(d?' done':'')+'" data-check="'+m.id+'" title="'+(d?'Costruito':'Non ancora costruito')+' — indicatore di sola lettura">'+(d?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'')+'</div>'+
+      '<span class="mod-dot dot '+m.status+'" style="background:var(--'+m.status+')"></span>'+
+      '<span class="mod-name">'+esc(m.nome)+'<span class="code">'+m.id.toUpperCase()+'</span></span>'+
+      '<span class="mod-badges">'+flags+'<span class="badge '+m.status+'">'+STMAP[m.status]+'</span></span>'+
+      '<span class="mod-sez">'+esc(m.sez)+'</span>'+
+      '<svg class="mod-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>'+
+    '</div>'+
+    modDetail(m)+
+  '</div>';
+}
+
+function render(){
+  const cont=document.getElementById('phasesContainer');
+  let anyMatch=false; let html='';
+  PHASES.forEach(p=>{
+    const mods=MODULES.filter(m=>m.ph===p.n);
+    const shown=mods.filter(matchMod);
+    if(shown.length===0)return;
+    anyMatch=true;
+    const doneN=mods.filter(isDone).length;
+    const pctW=Math.round(100*doneN/mods.length);
+    const openByDefault=(filterPhase===p.n)||query!=='';
+    html+='<div class="phase'+(openByDefault?' open':'')+'" data-ph="'+p.n+'" style="--phc:'+p.color+'">'+
+      '<div class="phase-head">'+
+        '<div class="phase-num">'+p.n+'</div>'+
+        '<div class="phase-info"><div class="phase-name">'+esc(p.nome)+'</div><div class="phase-sub">'+esc(p.sub)+'</div></div>'+
+        '<div class="phase-meta">'+
+          '<div class="phase-bar"><span style="width:'+pctW+'%"></span></div>'+
+          '<div class="phase-count">'+doneN+'/'+mods.length+'</div>'+
+          '<svg class="phase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>'+
+        '</div>'+
+      '</div>'+
+      '<div class="phase-body">'+shown.map(modRow).join('')+'</div>'+
+    '</div>';
+  });
+  cont.innerHTML=html;
+  document.getElementById('noMatch').classList.toggle('hidden',anyMatch);
+
+  // wire phase toggles
+  cont.querySelectorAll('.phase-head').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));
+  // wire module toggles
+  cont.querySelectorAll('.mod-head').forEach(h=>h.onclick=(e)=>{
+    if(e.target.closest('[data-check]'))return;
+    h.parentElement.classList.toggle('open');
+  });
+  // check = INDICATORE di sola lettura (nessun toggle): lo stato arriva dal JSON.
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// REFERENCE PANELS
+// ═══════════════════════════════════════════════════════════════════════════
+function refBlock(title,n,inner,open){
+  return '<div class="ref-block'+(open?' open':'')+'">'+
+    '<div class="ref-block-head"><div class="ref-block-title">'+title+' <span class="n">'+n+'</span></div>'+
+    '<svg class="ref-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
+    '<div class="ref-block-body">'+inner+'</div></div>';
+}
+
+function stPill(v){
+  const map={built:'Già costruito',partial:'Parziale',todo:'Da costruire'};
+  if(map[v]) return '<span class="st-pill '+v+'">'+map[v]+'</span>';
+  return '<span class="st-pill">'+esc(v)+'</span>';
+}
+// Rende un pannello di dominio dai dati del settore (stessa veste del modello)
+function renderPanel(p){
+  const t=p.type;
+  if(t==='states'){
+    let s='<table class="grid"><tr><th>Livello</th><th>Valori</th><th>Quando si usa</th><th>Staff Meal</th></tr>';
+    (p.rows||[]).forEach(r=>{s+='<tr><td>'+esc(r.liv)+'</td><td>'+esc(r.valori)+'</td><td>'+esc(r.uso)+(r.note?'<div style="margin-top:5px;font-size:11.5px;color:var(--ink-faint)">'+esc(r.note)+'</div>':'')+'</td><td>'+(r.sm?stPill(r.sm):'')+'</td></tr>';});
+    return s+'</table>';
+  }
+  if(t==='semaforo'){
+    let s='';(p.rows||[]).forEach(r=>{s+='<div class="sem-row"><div class="sem-dot '+esc(r[0])+'"></div><div class="sem-txt"><b>'+esc(r[1])+'</b> — <span class="m">'+esc(r[2])+'</span><div class="a">→ '+esc(r[3])+'</div></div></div>';});
+    return s;
+  }
+  if(t==='table'){
+    const cols=p.cols||[]; const sc=(p.statusCol==null?-1:p.statusCol); const mono=p.monoCols||[];
+    let s='<table class="grid"><tr>'+cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr>';
+    (p.rows||[]).forEach(row=>{
+      s+='<tr>'+row.map((cell,i)=> i===sc ? '<td>'+stPill(cell)+'</td>'
+        : '<td'+(mono.includes(i)?' class="code-cell" style="font-size:10.5px"':'')+'>'+esc(cell)+'</td>').join('')+'</tr>';
+    });
+    s+='</table>';
+    if(p.footNote) s+='<div style="margin-top:10px;font-size:11.5px;color:var(--ink-faint)">'+esc(p.footNote)+'</div>';
+    return s;
+  }
+  if(t==='list'){
+    return '<div class="mvp-list">'+(p.items||[]).map(x=>'<div class="mvp-item"><span>'+esc(x)+'</span></div>').join('')+'</div>';
+  }
+  return '';
+}
+
+function buildRef(){
+  const ref=(SECTOR&&SECTOR.ref)||{};
+  let h='';
+
+  // Cancelli (definition of done)
+  const gates=ref.gates||[];
+  if(gates.length){
+    let gt='<table class="grid"><tr><th>#</th><th>Cancello</th><th>Criterio</th><th>Stato</th></tr>';
+    gates.forEach(g=>{gt+='<tr><td class="code-cell">'+esc(g.n)+'</td><td><b>'+esc(g.nome)+'</b><div style="margin-top:4px;font-size:11.5px;color:var(--ink-faint)">'+esc(g.nota||'')+'</div></td><td>'+esc(g.criterio||'')+'</td><td><span class="st-pill" style="background:'+(g.color||'#888')+'22;color:'+(g.color||'#888')+';border-color:'+(g.color||'#888')+'55">'+esc(g.stato||'')+'</span></td></tr>';});
+    gt+='</table>';
+    h+=refBlock('🚦 '+esc(ref.gatesTitle||'Definition of Done — i cancelli'),gates.length+' cancelli',gt,true);
+  }
+
+  // Pannelli di riferimento di dominio (§5-bis) — profondità del settore
+  (ref.panels||[]).forEach((p,i)=>{
+    const inner=renderPanel(p);
+    if(inner) h+=refBlock(esc(p.title||'Riferimento'),esc(p.badge||''),inner,!!p.open || (i===0 && !gates.length));
+  });
+
+  // MVP / ordine consigliato dei prossimi passi
+  const mvp=ref.mvp||[];
+  if(mvp.length){
+    let mh='<div class="mvp-list">'+mvp.map(x=>'<div class="mvp-item"><span>'+esc(x)+'</span></div>').join('')+'</div>';
+    h+=refBlock('🎯 '+esc(ref.mvpTitle||'Ordine consigliato · prossimi passi'),mvp.length+' passi',mh);
+  }
+
+  // Backlog / cose in sospeso
+  const bl=ref.backlog||[];
+  if(bl.length){
+    let bh='<div class="mvp-list">'+bl.map(x=>'<div class="mvp-item"><span>'+esc(x)+'</span></div>').join('')+'</div>';
+    h+=refBlock('🧭 In sospeso · backlog',bl.length+' voci',bh);
+  }
+
+  // Legenda struttura A–J (fissa, spiega la mappa)
+  let mp='<div class="mp">'+
+    'Ogni modulo si apre con la struttura A–J (per aree non tecniche le lettere possono cambiare significato, la struttura resta fissa):<br><br>'+
+    '<b>A.</b> Obiettivo &nbsp; <b>B.</b> Rischio prevenuto<br>'+
+    '<b>C.</b> Tabelle/dati &nbsp; <b>D.</b> Flusso operatore<br>'+
+    '<b>E.</b> Flusso responsabile &nbsp; <b>F.</b> Limiti / alert<br>'+
+    '<b>G.</b> Azioni correttive &nbsp; <b>H.</b> PDF / report<br>'+
+    '<b>I.</b> Formazione &nbsp; <b>J.</b> Archiviazione<br><br>'+
+    'Il pallino colorato = stato del modulo (costruito / parziale / da fare). Il check = indicatore di sola lettura: è acceso solo per i moduli già costruiti. Nessun dato si scrive da questa pagina.'+
+    '</div>';
+  h+=refBlock('🤖 Come leggere la mappa','schema A–J',mp);
+
+  document.getElementById('refContainer').innerHTML=h;
+  document.querySelectorAll('.ref-block-head').forEach(hd=>hd.onclick=()=>hd.parentElement.classList.toggle('open'));
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+document.getElementById('searchInput').addEventListener('input',e=>{query=e.target.value.trim();render();});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INTESTAZIONE DINAMICA (da project_state.json) + INIT (dopo il fetch)
+// ═══════════════════════════════════════════════════════════════════════════
+function injectMeta(){
+  const set=(id,html)=>{const el=document.getElementById(id); if(el) el.innerHTML=html;};
+  set('pgEyebrow', esc((META.product||'Staff Meal')+' · Cruscotto vivo'));
+  set('pgTitle', esc(SECTOR.name?('Mappa settore — '+SECTOR.name):'Mappa settore'));
+  set('pgSub', esc(SECTOR.sub||''));
+  set('pgSources', SECTOR.sources?('FONTI · '+esc(SECTOR.sources)):'');
+  const anchor=META.code_anchor?String(META.code_anchor).slice(0,7):'—';
+  set('pgAnchor','Sola lettura · ancora codice <b>'+anchor+'</b>'+(META.state_version?(' · stato '+esc(META.state_version)):'')+(META.updated?(' · '+esc(META.updated)):''));
+  set('phaseCount', PHASES.length+' fasi · '+MODULES.length+' moduli');
+  if(SECTOR.intro){ set('introBody', SECTOR.intro); }
+  else { const s=document.getElementById('introSection'); if(s) s.style.display='none'; }
+  document.title='Staff Meal · Mappa '+(SECTOR.name||'settore');
+}
+function boot(){ injectMeta(); buildChips(); render(); buildRef(); updateProgress(); }
+
+fetch('project_state.json',{cache:'no-store'})
+  .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(d=>{ applyState(d); boot(); })
+  .catch(err=>{
+    document.getElementById('phasesContainer').innerHTML=
+      '<div class="no-match">Impossibile caricare <b>project_state.json</b>: '+esc(err.message)+
+      '.<br>Se apri il file con doppio clic (file://) il browser blocca il fetch — serve un piccolo server locale nella cartella (es. <code>python3 -m http.server</code>). Online (Netlify) funziona senza altro.</div>';
+    document.getElementById('noMatch').classList.add('hidden');
+  });
+
+</script>
+</body>
+</html>
